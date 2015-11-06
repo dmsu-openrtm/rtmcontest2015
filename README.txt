@@ -1,0 +1,106 @@
+/** 著作権および免責事項 **/
+
+著作権は埼玉大学設計工学研究室が保有しています．このソフトウェアを使用したことによって生じたすべての障害・損害・不具合等に関しては，一切の責任を負いません．各自の責任においてご使用ください．ライセンスに関しては，各々の上位ディレクトリを参照ください．
+
+/** 更新履歴 **/
+バージョン  更新日      更新内容                           
+--------------------------------------------------------------------------------
+1.0         2015/10/31  新規公開
+1.0.1	    2015/11/2 　解説マニュアルに「ソースコード，ライブラリの引用・参照箇所」の追加
+				        ライセンス条件の変更
+				        OpenRTM TutorialにおけるScaraRobot部分の公開
+1.1.0       2015/11/6   OpenRTM-aist C++のバージョンを1.1.0から1.1.1へ更新 (binおよびsrcをすべて再生成)
+                        camera_para.datをArToolKit配布時の標準的なものに変更
+                        "armarker_for_palletizing.pdf"を点対称・線対称にならないように変更，同時にpatternファイル (patt_r, patt_t, patt_m) を再生成
+                        解説マニュアル等のマニュアルを更新
+                        動画を視聴時間短縮のため早送り
+
+----------
+本パッケージは、RTミドルウエアコンテスト2015の応募作品である「USBメモリに搭載したポータブルRTM環境を用いたロボット教育ツール」をパッケージ化したものです．
+はじめに，"OpenRTM_Tutorial\Start_OpenRTM_Tutorial.pdf"をお読みください．
+詳細は各ディレクトリの"README.txt"を参照してください．
+
+----------
+ScaraRobotRTC1_0
+  ├Document
+  │  ├01_Control_AcademicScaraRobot_by_RTC.pdf
+  │  ├11_VS_ASR_RTC_manual.pdf
+  │  ├12_ScaraRobotControlRTC_manual.pdf
+  │  ├13_DetectArMarkerRTC_manual.pdf
+  │  ├14_ScaraRobotArRTC_manual.pdf
+  │  ├21_RTC_DevelopmentEnviroment_manual.pdf
+  │  ├LICENSE.txt
+  │  └README.txt
+  ├Movie
+  │  ├01_ScaraRobotDemo.mp4
+  │  ├02_PalletizingDemo.mp4
+  │  ├LICENSE.txt
+  │  └README.txt
+  ├OpenRTM_Tutorial
+  │  ├source
+  │  │  ├demo
+  │  │  ├doc
+  │  │  └misc
+  │  ├LICENSE.txt
+  │  ├Start_OpenRTM_Tutorial.pdf
+  │  └README.txt
+  ├RTC
+  │  ├DetectArMarkerRTC
+  │  │  ├bin
+  │  │  │  ├Data
+  │  │  │  ｜  ├armarker_for_palletizing.pdf
+  │  │  │  ｜  ├camera_para.dat
+  │  │  │  ｜  ├patt_m
+  │  │  │  ｜  ├patt_r
+  │  │  │  ｜  ├patt_t
+  │  │  │  ｜  ├robot_calibration_grid.pdf
+  │  │  │  ｜  └WDM_camera_flipV.xml
+  │  │  │  ├DetectArMarkerRTC.dll
+  │  │  │  ├DetectArMarkerRTC.exp
+  │  │  │  ├DetectArMarkerRTC.lib
+  │  │  │  ├DetectArMarkerRTCComp.exe
+  │  │  │  ├DetectArMarkerRTCComp.exp
+  │  │  │  ├DetectArMarkerRTCComp.lib
+  │  │  │  ├DSVL.dll
+  │  │  │  ├libARvideo.dll
+  │  │  │  └rtc.conf
+  │  │  ├src
+  │  │  └COPYING.txt
+  │  ├ScaraRobotArRTC
+  │  │  ├bin
+  │  │  │  ├rtc.conf
+  │  │  │  ├ScaraRobotArRTC.dll
+  │  │  │  ├ScaraRobotArRTC.exp
+  │  │  │  ├ScaraRobotArRTC.lib
+  │  │  │  ├ScaraRobotArRTCComp.exe
+  │  │  │  ├ScaraRobotArRTCComp.exp
+  │  │  │  └ScaraRobotArRTCComp.lib
+  │  │  ├src
+  │  │  └LICENSE.txt
+  │  ├ScaraRobotControlRTC
+  │  │  ├bin
+  │  │  │  ├rtc.conf
+  │  │  │  ├Sample.csv
+  │  │  │  ├ScaraRobotControlRTC.dll
+  │  │  │  ├ScaraRobotControlRTC.exp
+  │  │  │  ├ScaraRobotControlRTC.lib
+  │  │  │  ├ScaraRobotControlRTCComp.exe
+  │  │  │  ├ScaraRobotControlRTCComp.exp
+  │  │  │  └ScaraRobotControlRTCComp.lib
+  │  │  ├src
+  │  │  └LICENSE.txt
+  │  ├VS_ASR_RTC
+  │  │  ├bin
+  │  │  │  ├rtc.conf
+  │  │  │  ├SLABHIDDevice.dll
+  │  │  │  ├SLABHIDtoUART.dll
+  │  │  │  ├VS_ASR_RTC.dll
+  │  │  │  ├VS_ASR_RTC.exp
+  │  │  │  ├VS_ASR_RTC.lib
+  │  │  │  ├VS_ASR_RTCComp.exe
+  │  │  │  ├VS_ASR_RTCComp.exp
+  │  │  │  └VS_ASR_RTCComp.lib
+  │  │  ├src
+  │  │  └LICENSE.txt
+  │  └README.txt
+  └README.txt
