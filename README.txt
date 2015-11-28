@@ -14,7 +14,10 @@
                         "armarker_for_palletizing.pdf"を点対称・線対称にならないように変更，同時にpatternファイル (patt_r, patt_t, patt_m) を再生成
                         解説マニュアル等のマニュアルを更新
                         動画を視聴時間短縮のため早送り
-
+1.2.0       2015/11/28  OpenRTM Tutorialとの互換性を保つためOpenRTM-aist C++ 1.1.0-RELEASE へダウングレード，
+                        ARマーカに用いたパレタイジングデモに関して，三菱電機株式会社MELFA-RV-3SDを追加(マニュアル，動画，RTC)
+                        DetectArMarkerRTCにおいて，2値化の閾値をアクティブに変更可能に
+                        "Start_OpenRTM_Tutorial.pdf"の更新
 ----------
 本パッケージは、RTミドルウエアコンテスト2015の応募作品である「USBメモリに搭載したポータブルRTM環境を用いたロボット教育ツール」をパッケージ化したものです．
 はじめに，"OpenRTM_Tutorial\Start_OpenRTM_Tutorial.pdf"をお読みください．
@@ -24,6 +27,7 @@
 ScaraRobotRTC1_0
   ├Document
   │  ├01_Control_AcademicScaraRobot_by_RTC.pdf
+  │  ├02_Control_MELFA_RV-3SD_by_RTC.pdf
   │  ├11_VS_ASR_RTC_manual.pdf
   │  ├12_ScaraRobotControlRTC_manual.pdf
   │  ├13_DetectArMarkerRTC_manual.pdf
@@ -33,7 +37,8 @@ ScaraRobotRTC1_0
   │  └README.txt
   ├Movie
   │  ├01_ScaraRobotDemo.mp4
-  │  ├02_PalletizingDemo.mp4
+  │  ├02_PalletizingDemo_by_VS_ASR.mp4
+  │  ├03_PalletizingDemo_by_MELFA_RV-3SD.mp4
   │  ├LICENSE.txt
   │  └README.txt
   ├OpenRTM_Tutorial
@@ -55,38 +60,49 @@ ScaraRobotRTC1_0
   │  │  │  ｜  ├patt_t
   │  │  │  ｜  ├robot_calibration_grid.pdf
   │  │  │  ｜  └WDM_camera_flipV.xml
-  │  │  │  ├DetectArMarkerRTC.dll
-  │  │  │  ├DetectArMarkerRTC.exp
-  │  │  │  ├DetectArMarkerRTC.lib
-  │  │  │  ├DetectArMarkerRTCComp.exe
-  │  │  │  ├DetectArMarkerRTCComp.exp
-  │  │  │  ├DetectArMarkerRTCComp.lib
+  │  │  │  ├detectarmarkerrtc.dll
+  │  │  │  ├detectarmarkerrtc.exp
+  │  │  │  ├detectarmarkerrtc.lib
+  │  │  │  ├detectarmarkerrtccomp.exe
   │  │  │  ├DSVL.dll
+  │  │  │  ├freeglut.dll
   │  │  │  ├libARvideo.dll
   │  │  │  └rtc.conf
   │  │  ├src
   │  │  └COPYING.txt
+  │  ├DIOInterfaceModuleRTC
+  │  │  ├bin
+  │  │  │  ├diointerfacemodulertc.dll
+  │  │  │  ├diointerfacemodulertc.exp
+  │  │  │  ├diointerfacemodulertc.lib
+  │  │  │  ├diointerfacemodulertccomp.exe
+  │  │  │  └rtc.conf
+  │  │  └LICENSE.txt
+  │  ├RobotArmCommonInterfaceConvertRTC
+  │  │  ├bin
+  │  │  │  ├robotarmcommoninterfaceconvertrtc.dll
+  │  │  │  ├robotarmcommoninterfaceconvertrtc.exp
+  │  │  │  ├robotarmcommoninterfaceconvertrtc.lib
+  │  │  │  ├robotarmcommoninterfaceconvertrtccomp.exe
+  │  │  │  └rtc.conf
+  │  │  └LICENSE.txt
   │  ├ScaraRobotArRTC
   │  │  ├bin
   │  │  │  ├rtc.conf
-  │  │  │  ├ScaraRobotArRTC.dll
-  │  │  │  ├ScaraRobotArRTC.exp
-  │  │  │  ├ScaraRobotArRTC.lib
-  │  │  │  ├ScaraRobotArRTCComp.exe
-  │  │  │  ├ScaraRobotArRTCComp.exp
-  │  │  │  └ScaraRobotArRTCComp.lib
+  │  │  │  ├scararobotarrtc.dll
+  │  │  │  ├scararobotarrtc.exp
+  │  │  │  ├scararobotarrtc.lib
+  │  │  │  └scararobotarrtccomp.exe
   │  │  ├src
   │  │  └LICENSE.txt
   │  ├ScaraRobotControlRTC
   │  │  ├bin
   │  │  │  ├rtc.conf
   │  │  │  ├Sample.csv
-  │  │  │  ├ScaraRobotControlRTC.dll
-  │  │  │  ├ScaraRobotControlRTC.exp
-  │  │  │  ├ScaraRobotControlRTC.lib
-  │  │  │  ├ScaraRobotControlRTCComp.exe
-  │  │  │  ├ScaraRobotControlRTCComp.exp
-  │  │  │  └ScaraRobotControlRTCComp.lib
+  │  │  │  ├scararobotcontrolrtc.dll
+  │  │  │  ├scararobotcontrolrtc.exp
+  │  │  │  ├scararobotcontrolrtc.lib
+  │  │  │  └scararobotcontrolrtccomp.exe
   │  │  ├src
   │  │  └LICENSE.txt
   │  ├VS_ASR_RTC
@@ -94,12 +110,10 @@ ScaraRobotRTC1_0
   │  │  │  ├rtc.conf
   │  │  │  ├SLABHIDDevice.dll
   │  │  │  ├SLABHIDtoUART.dll
-  │  │  │  ├VS_ASR_RTC.dll
-  │  │  │  ├VS_ASR_RTC.exp
-  │  │  │  ├VS_ASR_RTC.lib
-  │  │  │  ├VS_ASR_RTCComp.exe
-  │  │  │  ├VS_ASR_RTCComp.exp
-  │  │  │  └VS_ASR_RTCComp.lib
+  │  │  │  ├vs_asr_rtc.dll
+  │  │  │  ├vs_asr_rtc.exp
+  │  │  │  ├vs_asr_rtc.lib
+  │  │  │  └vs_asr_rtccomp.exe
   │  │  ├src
   │  │  └LICENSE.txt
   │  └README.txt

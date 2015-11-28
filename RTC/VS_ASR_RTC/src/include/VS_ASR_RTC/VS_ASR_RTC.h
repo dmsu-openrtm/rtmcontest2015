@@ -259,10 +259,10 @@ class VS_ASR_RTC
   // <rtc-template block="service_declare">
   /*!
    */
-  ManipulatorCommonInterface_CommonSVC_impl m_ManipulatorCommonInterface_Common;
+  ManipulatorCommonInterface_CommonSVC_impl m_JARA_ARM_ManipulatorCommonInterface_Common;
   /*!
    */
-  ManipulatorCommonInterface_MiddleSVC_impl m_ManipulatorCommonInterface_Middle;
+  ManipulatorCommonInterface_MiddleSVC_impl m_JARA_ARM_ManipulatorCommonInterface_Middle;
   
   // </rtc-template>
 

@@ -67,8 +67,8 @@ RTC::ReturnCode_t VS_ASR_RTC::onInitialize()
   // Set OutPort buffer
   
   // Set service provider to Ports
-  m_ManipulatorCommonInterface_CommonPort.registerProvider("ManipulatorCommonInterface_Common", "JARA_ARM::ManipulatorCommonInterface_Common", m_ManipulatorCommonInterface_Common);
-  m_ManipulatorCommonInterface_MiddlePort.registerProvider("ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_ManipulatorCommonInterface_Middle);
+  m_ManipulatorCommonInterface_CommonPort.registerProvider("JARA_ARM_ManipulatorCommonInterface_Common", "JARA_ARM::ManipulatorCommonInterface_Common", m_JARA_ARM_ManipulatorCommonInterface_Common);
+  m_ManipulatorCommonInterface_MiddlePort.registerProvider("JARA_ARM_ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_JARA_ARM_ManipulatorCommonInterface_Middle);
   
   // Set service consumers to Ports
   
@@ -81,7 +81,7 @@ RTC::ReturnCode_t VS_ASR_RTC::onInitialize()
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
   bindParameter("servoNum", m_servoNum, "5");
-
+  
   // </rtc-template>
   return RTC::RTC_OK;
 }
@@ -172,7 +172,6 @@ RTC::ReturnCode_t VS_ASR_RTC::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t VS_ASR_RTC::onExecute(RTC::UniqueId ec_id)
 {
-
   return RTC::RTC_OK;
 }
 
@@ -182,7 +181,6 @@ RTC::ReturnCode_t VS_ASR_RTC::onAborting(RTC::UniqueId ec_id)
 	std::cout<<"******************************"<<std::endl;
 	std::cout<<"            Error             "<<std::endl;
 	std::cout<<"******************************"<<std::endl<<std::endl;
-
   return RTC::RTC_OK;
 }
 

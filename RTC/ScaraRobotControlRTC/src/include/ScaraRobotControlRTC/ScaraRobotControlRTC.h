@@ -19,7 +19,6 @@
 #include <rtm/idl/ExtendedDataTypesSkel.h>
 #include <rtm/idl/InterfaceDataTypesSkel.h>
 
-
 // Service implementation headers
 // <rtc-template block="service_impl_h">
 
@@ -250,6 +249,18 @@ class ScaraRobotControlRTC
    * - DefaultValue: 0.0
    */
   double m_BaseOffsetY;
+  /*!
+   * 
+   * - Name:  BaseOffsetZ
+   * - DefaultValue: 0.0
+   */
+  double m_BaseOffsetZ;
+  /*!
+   * 
+   * - Name:  RobotName
+   * - DefaultValue: ROBOT_NAME
+   */
+  std::string m_RobotName;
   // </rtc-template>
 
   // DataInPort declaration
@@ -260,6 +271,10 @@ class ScaraRobotControlRTC
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
+  TimedBooleanSeq m_digitalOutput;
+  /*!
+   */
+  OutPort<TimedBooleanSeq> m_digitalOutputOut;
   
   // </rtc-template>
 
@@ -283,10 +298,10 @@ class ScaraRobotControlRTC
   // <rtc-template block="consumer_declare">
   /*!
    */
-  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Common> m_ManipulatorCommonInterface_Common;
+  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Common> m_JARA_ARM_ManipulatorCommonInterface_Common;
   /*!
    */
-  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_ManipulatorCommonInterface_Middle;
+  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_JARA_ARM_ManipulatorCommonInterface_Middle;
   
   // </rtc-template>
 
@@ -298,6 +313,7 @@ class ScaraRobotControlRTC
   // <rtc-template block="private_operation">
   
   // </rtc-template>
+
 	 JARA_ARM::RETURN_ID_var m_rid;
 	 char m_command[100];
 	 double m_Buf[5];

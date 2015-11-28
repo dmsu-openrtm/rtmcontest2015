@@ -10,9 +10,6 @@
 
 #include "ScaraRobotArRTC.h"
 
-#define XCOOR_MAX 40
-#define YCOOR_MAX 70
-
 // Module specification
 // <rtc-template block="module_spec">
 static const char* scararobotarrtc_spec[] =
@@ -32,10 +29,18 @@ static const char* scararobotarrtc_spec[] =
     "conf.default.Speed", "30",
     "conf.default.BaseOffsetX", "0.0",
     "conf.default.BaseOffsetY", "0.0",
+    "conf.default.BaseOffsetZ", "0.0",
+    "conf.default.RobotName", "ROBOT_NAME",
+	"conf.default.CoordMaxX", "0.04",
+	"conf.default.CoordMaxY", "0.07",
     // Widget
     "conf.__widget__.Speed", "text",
     "conf.__widget__.BaseOffsetX", "text",
     "conf.__widget__.BaseOffsetY", "text",
+    "conf.__widget__.BaseOffsetZ", "text",
+    "conf.__widget__.RobotName", "text",
+	"conf.__widget__.CoordMaxX", "text",
+	"conf.__widget__.CoordMaxY", "text",
     // Constraints
     ""
   };
@@ -49,6 +54,7 @@ ScaraRobotArRTC::ScaraRobotArRTC(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
     m_CoordIn("Coord", m_Coord),
+    m_digitalOutputOut("digitalOutput", m_digitalOutput),
     m_ManipulatorCommonInterface_CommonPort("ManipulatorCommonInterface_Common"),
     m_ManipulatorCommonInterface_MiddlePort("ManipulatorCommonInterface_Middle")
 
@@ -73,12 +79,13 @@ RTC::ReturnCode_t ScaraRobotArRTC::onInitialize()
   addInPort("Coord", m_CoordIn);
   
   // Set OutPort buffer
+  addOutPort("digitalOutput", m_digitalOutputOut);
   
   // Set service provider to Ports
   
   // Set service consumers to Ports
-  m_ManipulatorCommonInterface_CommonPort.registerConsumer("ManipulatorCommonInterface_Common", "JARA_ARM::ManipulatorCommonInterface_Common", m_ManipulatorCommonInterface_Common);
-  m_ManipulatorCommonInterface_MiddlePort.registerConsumer("ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_ManipulatorCommonInterface_Middle);
+  m_ManipulatorCommonInterface_CommonPort.registerConsumer("JARA_ARM_ManipulatorCommonInterface_Common", "JARA_ARM::ManipulatorCommonInterface_Common", m_JARA_ARM_ManipulatorCommonInterface_Common);
+  m_ManipulatorCommonInterface_MiddlePort.registerConsumer("JARA_ARM_ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_JARA_ARM_ManipulatorCommonInterface_Middle);
   
   // Set CORBA Service Ports
   addPort(m_ManipulatorCommonInterface_CommonPort);
@@ -91,6 +98,10 @@ RTC::ReturnCode_t ScaraRobotArRTC::onInitialize()
   bindParameter("Speed", m_Speed, "30");
   bindParameter("BaseOffsetX", m_BaseOffsetX, "0.0");
   bindParameter("BaseOffsetY", m_BaseOffsetY, "0.0");
+  bindParameter("BaseOffsetZ", m_BaseOffsetZ, "0.0");
+  bindParameter("RobotName", m_RobotName, "ROBOT_NAME");
+  bindParameter("CoordMaxX", m_CoordMaxX, "0.04");
+  bindParameter("CoordMaxY", m_CoordMaxY, "0.07");
   
   // </rtc-template>
   return RTC::RTC_OK;
@@ -126,7 +137,8 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 
 	// 変数の初期化
 	m_Coord.data.length(9);
-	
+	m_digitalOutput.data.length(2);
+
 	// 動作速度設定
 	std::cout<<"Set Speed"<<std::endl<<std::endl;
 	if((m_Speed <= 0) || (m_Speed > 100)) { // Error
@@ -134,36 +146,54 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 		return RTC::RTC_ERROR;
 	}
 		
-	m_rid = m_ManipulatorCommonInterface_Middle->setSpeedCartesian(m_Speed);
+	m_rid = m_JARA_ARM_ManipulatorCommonInterface_Middle->setSpeedCartesian(m_Speed);
 	if(m_rid -> id != 0) { // Error
 		std::cout<<"Set Speed Cartesian is Failure"<<std::endl;
 		std::cout<<m_rid -> comment<<std::endl<<std::endl;
 		return RTC::RTC_ERROR;
 	}
 
-	m_rid = m_ManipulatorCommonInterface_Middle->setSpeedJoint(m_Speed);
+	m_rid = m_JARA_ARM_ManipulatorCommonInterface_Middle->setSpeedJoint(m_Speed);
 	if(m_rid -> id != 0) { // Error
 		std::cout<<"Set Speed Joint is Failure"<<std::endl;
 		std::cout<<m_rid -> comment<<std::endl<<std::endl;
 		return RTC::RTC_ERROR;
 	}
 
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 	std::cout<<std::endl<<"******************************"<<std::endl;
 	std::cout<<"        Set BaseOffset        "<<std::endl;
 	std::cout<<"******************************"<<std::endl<<std::endl;
 	
+	// サーボON
+	strcpy(m_command, "SERVO_ON");
+	if(ActCommand() != RTC::RTC_OK) {
+		return RTC::RTC_ERROR;
+	}
+
 	// アームを初期位置へ移動
-	m_Buf[0] = 0;		// [rad]
-	m_Buf[1] = 0;		// [rad]
-	m_Buf[2] = 0.005;	// [m]
-	m_Buf[3] = 0;		// [rad]
+	if(m_RobotName == "SCARA") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = 0.005;	// [m]
+			m_Buf[3] = 0;		// [rad]
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = M_PI/2;	// [rad]
+			m_Buf[3] = 0;		// [rad]
+			m_Buf[4] = M_PI/2;	// [rad]
+			m_Buf[5] = 0;		// [rad]
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+			return RTC::RTC_ERROR;
+		}
 	strcpy(m_command, "JMOV");
 	if(ActCommand() != RTC::RTC_OK) {
 		return RTC::RTC_ERROR;
 	}
-		
+
 	// ハンドを閉じる
 	strcpy(m_command, "HAND_CLOSE");
 	if(ActCommand() != RTC::RTC_OK) {
@@ -176,12 +206,33 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 		return RTC::RTC_ERROR;
 	}
 
+	// ベースオフセット初期化
+	offset[0][0] = 1.0; offset[0][1] = 0.0; offset[0][2] = 0.0; offset[0][3] = 0.0;
+	offset[1][0] = 0.0; offset[1][1] = 1.0; offset[1][2] = 0.0; offset[1][3] = 0.0;
+	offset[2][0] = 0.0; offset[2][1] = 0.0; offset[2][2] = 1.0; offset[2][3] = 0.0;
+	m_rid = m_JARA_ARM_ManipulatorCommonInterface_Middle -> setBaseOffset(offset);
+	if(m_rid -> id != 0) { // Error
+		std::cout<<"Set Base Offset is Failure"<<std::endl;
+		std::cout<<m_rid -> comment<<std::endl<<std::endl;
+		return RTC::RTC_ERROR;
+	}
+
 	std::cout<<std::endl<<"******************************"<<std::endl;
 	std::cout<<"(1) Move the robot hand to the point of origin manually."<<std::endl;
-	std::cout<<"(2) Press 'Enter' key."<<std::endl<<std::endl;
+	std::cout<<"(2) Return 's' and 'Enter' key. If you want to exit, return 'e' and 'Enter' key."<<std::endl<<std::endl;
 
 	// ユーザによる設定待機
-	getchar();
+	char c[1];
+	while(1){
+		std::cin>>c;
+		if(strcmp(c,"e") == 0) {
+			//this->get_context(0)->deactivate_component(this->getObjRef());
+			this->deactivate(ec_id);
+			return RTC::RTC_OK;
+		}else if(strcmp(c,"s") == 0){
+			break;
+		}
+	}
 
 	// サーボON
 	strcpy(m_command, "SERVO_ON");
@@ -190,30 +241,36 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 	}
 		
 	// ユーザによる設定位置取得
-	m_ManipulatorCommonInterface_Middle->getFeedbackPosCartesian(m_CarPos);
+	m_JARA_ARM_ManipulatorCommonInterface_Middle->getFeedbackPosCartesian(m_CarPos);
 		
 	// ベースオフセット設定
-	
-	// 1st~3rd line
 	offset[0][0] = 1.0; offset[0][1] = 0.0; offset[0][2] = 0.0;
 	offset[1][0] = 0.0; offset[1][1] = 1.0; offset[1][2] = 0.0;
 	offset[2][0] = 0.0; offset[2][1] = 0.0; offset[2][2] = 1.0;
-
-	// 4th line
+	// 4th column
 	offset[0][3] = m_BaseOffsetX + m_CarPos.carPos[0][3];
 	offset[1][3] = m_BaseOffsetY + m_CarPos.carPos[1][3];
-	offset[2][3] = 0.0;
-
-	m_rid = m_ManipulatorCommonInterface_Middle -> setBaseOffset(offset);
+	if(m_RobotName == "SCARA") {
+		offset[2][3] = m_BaseOffsetZ;
+	}
+	else if(m_RobotName == "MITSUBISHI") {
+		offset[2][3] = m_BaseOffsetZ + m_CarPos.carPos[2][3];
+	}
+	else {
+		std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+		return RTC::RTC_ERROR;
+	}
+	m_rid = m_JARA_ARM_ManipulatorCommonInterface_Middle -> setBaseOffset(offset);
 	if(m_rid -> id != 0) { // Error
 		std::cout<<"Set Base Offset is Failure"<<std::endl;
 		std::cout<<m_rid -> comment<<std::endl<<std::endl;
 		return RTC::RTC_ERROR;
 	}
 	
-	// 設定オフセット値の表示
+	// 設定ベースオフセット値の表示
 	std::cout<<"BaseOffsetX = "<<offset[0][3]<<std::endl;
-	std::cout<<"BaseOffsetY = "<<offset[1][3]<<std::endl<<std::endl;
+	std::cout<<"BaseOffsetY = "<<offset[1][3]<<std::endl;
+	std::cout<<"BaseOffsetZ = "<<offset[2][3]<<std::endl<<std::endl;
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -222,11 +279,31 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 	std::cout<<"***************************"<<std::endl<<std::endl;
 
 	// アームを初期位置へ移動
-	m_Buf[0] = 0.0;		// [rad]
-	m_Buf[1] = 0.0;		// [rad]
-	m_Buf[2] = 0.06;	// [m]
-	m_Buf[3] = 0.0;		// [rad]
+	if(m_RobotName == "SCARA") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = 0.06;	// [m]
+			m_Buf[3] = 0;		// [rad]
+	}
+	else if(m_RobotName == "MITSUBISHI") {
+		m_Buf[0] = 0;		// [rad]
+		m_Buf[1] = 0;		// [rad]
+		m_Buf[2] = M_PI/2;	// [rad]
+		m_Buf[3] = 0;		// [rad]
+		m_Buf[4] = M_PI/2;	// [rad]
+		m_Buf[5] = 0;		// [rad]
+	}
+	else {
+		std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+		return RTC::RTC_ERROR;
+	}
 	strcpy(m_command, "JMOV");
+	if(ActCommand() != RTC::RTC_OK) {
+		return RTC::RTC_ERROR;
+	}
+
+	// サーボOFF
+	strcpy(m_command, "SERVO_OFF");
 	if(ActCommand() != RTC::RTC_OK) {
 		return RTC::RTC_ERROR;
 	}
@@ -290,8 +367,9 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 		default:
 			break;
 		}
+		
 		std::cout<<std::endl<<"(1) Put 'R' marker."<<std::endl;
-		std::cout<<"(2) Press 'Enter.'"<<std::endl;
+		std::cout<<"(2) Press 'Enter' key."<<std::endl;
 
 		// マーカが置かれるまで待機
 		getch();
@@ -378,9 +456,9 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 		wmat_x[i][3] = 1.0;
 	}
 	wmat_x[0][4] = 0.0;
-	wmat_x[1][4] = -XCOOR_MAX;
-	wmat_x[2][4] = XCOOR_MAX;
-	wmat_x[3][4] = XCOOR_MAX;
+	wmat_x[1][4] = -m_CoordMaxX;
+	wmat_x[2][4] = m_CoordMaxX;
+	wmat_x[3][4] = m_CoordMaxX;
 		
 	for(int i = 0; i < 4; i++) {
 		for(int j = 0; j < 3; j++) {
@@ -391,9 +469,9 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 		wmat_y[i][3] = 1.0;
 	}
 	wmat_y[0][4] = 0.0;
-	wmat_y[1][4] = -YCOOR_MAX;
-	wmat_y[2][4] = -YCOOR_MAX;
-	wmat_y[3][4] = YCOOR_MAX;
+	wmat_y[1][4] = -m_CoordMaxY;
+	wmat_y[2][4] = -m_CoordMaxY;
+	wmat_y[3][4] = m_CoordMaxY;
 		
 	// ガウス消去法
 	Gauss4(wmat_x);
@@ -417,25 +495,30 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 	tmat[3][3] = 1;
 	
 	std::cout<<std::endl<<"Transformation matrix"<<std::endl;
-	std::cout<<"( "<<tmat[0][0]<<" "<<tmat[0][1]<<" "<<tmat[0][2]<<" "<<tmat[0][3]<<std::endl;
-	std::cout<<"( "<<tmat[1][0]<<" "<<tmat[1][1]<<" "<<tmat[1][2]<<" "<<tmat[1][3]<<std::endl;
-	std::cout<<"( "<<tmat[2][0]<<" "<<tmat[2][1]<<" "<<tmat[2][2]<<" "<<tmat[2][3]<<std::endl;
-	std::cout<<"( "<<tmat[3][0]<<" "<<tmat[3][1]<<" "<<tmat[3][2]<<" "<<tmat[3][3]<<std::endl;
-
-	std::cout<<std::endl<<"******************************"<<std::endl;
-
+	std::cout<<"( "<<tmat[0][0]<<" "<<tmat[0][1]<<" "<<tmat[0][2]<<" "<<tmat[0][3]<<" )"<<std::endl;
+	std::cout<<"( "<<tmat[1][0]<<" "<<tmat[1][1]<<" "<<tmat[1][2]<<" "<<tmat[1][3]<<" )"<<std::endl;
+	std::cout<<"( "<<tmat[2][0]<<" "<<tmat[2][1]<<" "<<tmat[2][2]<<" "<<tmat[2][3]<<" )"<<std::endl;
+	std::cout<<"( "<<tmat[3][0]<<" "<<tmat[3][1]<<" "<<tmat[3][2]<<" "<<tmat[3][3]<<" )"<<std::endl;
 
 	std::cout<<std::endl<<"******************************"<<std::endl;
 	std::cout<<"(1) Put 'R', 'T' and 'M' marker."<<std::endl;
-	std::cout<<"(2) Press 'Enter' key."<<std::endl<<std::endl;
-	
-	getchar();
+	std::cout<<"(2) Return 's' and 'Enter' key. If you want to exit, return 'e' and 'Enter' key."<<std::endl<<std::endl;
+
+	// ユーザによる設定待機
+	while(1){
+		std::cin>>c;
+		if(strcmp(c,"e") == 0) {
+			//this->get_context(0)->deactivate_component(this->getObjRef());
+			this->deactivate(ec_id);
+			return RTC::RTC_OK;
+		}else if(strcmp(c,"s") == 0){
+			break;
+		}
+	}
 
 	double coord[3][3];
 	double dis[3][3];
-	double insec_k[3];
-	double insec[3][3];
-
+	
 	// coord 初期化
 	for(int i = 0; i < 3; i++) {
 		for(int j = 0; j < 3; j++) {
@@ -466,6 +549,8 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 		dis[i][2] = fabs(plane_coef[0] * coord[i][0] + plane_coef[1] * coord[i][1] + plane_coef[2] * coord[i][2] + plane_coef[3]) / sqrt(plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
 	}
 
+	double insec_k[3];
+	double insec[3][3];
 
 	// 点から平面に下ろした垂線と平面との交点の導出
 	for(int i = 0; i < 3; i++) {
@@ -485,15 +570,31 @@ RTC::ReturnCode_t ScaraRobotArRTC::onActivated(RTC::UniqueId ec_id)
 	}
 
 	// 座標の表示
-	std::cout<<"Marker R ( "<<dis[0][0]<<", "<<dis[0][1]<<", "<<dis[0][2]<<" )"<<std::endl;
-	std::cout<<"Marker T ( "<<dis[1][0]<<", "<<dis[1][1]<<", "<<dis[1][2]<<" )"<<std::endl;
-	std::cout<<"Marker M ( "<<dis[2][0]<<", "<<dis[2][1]<<", "<<dis[2][2]<<" )"<<std::endl;
+	std::cout<<"Marker R ( "<<dis[0][0] * 1000<<", "<<dis[0][1] * 1000<<", "<<dis[0][2] * 1000<<" )"<<std::endl;
+	std::cout<<"Marker T ( "<<dis[1][0] * 1000<<", "<<dis[1][1] * 1000<<", "<<dis[1][2] * 1000<<" )"<<std::endl;
+	std::cout<<"Marker M ( "<<dis[2][0] * 1000<<", "<<dis[2][1] * 1000<<", "<<dis[2][2] * 1000<<" )"<<std::endl;
 
 	std::cout<<std::endl<<"******************************"<<std::endl;
 	std::cout<<"(1) Check value."<<std::endl;
-	std::cout<<"(2) Value is alomost correct, press 'Enter' key. If not, deactivate RTC and activate RTC again."<<std::endl<<std::endl;
+	std::cout<<"(2) Value is alomost correct, return 's' and 'Enter' key. If not, return 'e' and 'Enter' key to exit."<<std::endl<<std::endl;
 
-	getchar();
+	// ユーザによる設定待機
+	while(1){
+		std::cin>>c;
+		if(strcmp(c,"e") == 0) {
+			//this->get_context(0)->deactivate_component(this->getObjRef());
+			this->deactivate(ec_id);
+			return RTC::RTC_OK;
+		}else if(strcmp(c,"s") == 0){
+			break;
+		}
+	}
+
+	// サーボON
+	strcpy(m_command, "SERVO_ON");
+	if(ActCommand() != RTC::RTC_OK) {
+		return RTC::RTC_ERROR;
+	}
 
 	std::cout<<std::endl<<"******************************"<<std::endl;
 	std::cout<<"           Execute            "<<std::endl;
@@ -508,6 +609,23 @@ RTC::ReturnCode_t ScaraRobotArRTC::onDeactivated(RTC::UniqueId ec_id)
 	std::cout<<std::endl<<"******************************"<<std::endl;
 	std::cout<<"          Deactivate          "<<std::endl;
 	std::cout<<"******************************"<<std::endl<<std::endl;
+	
+	// ベースオフセット初期化
+	offset[0][0] = 1.0; offset[0][1] = 0.0; offset[0][2] = 0.0; offset[0][3] = 0.0;
+	offset[1][0] = 0.0; offset[1][1] = 1.0; offset[1][2] = 0.0; offset[1][3] = 0.0;
+	offset[2][0] = 0.0; offset[2][1] = 0.0; offset[2][2] = 1.0; offset[2][3] = 0.0;
+	m_rid = m_JARA_ARM_ManipulatorCommonInterface_Middle -> setBaseOffset(offset);
+	if(m_rid -> id != 0) { // Error
+		std::cout<<"Set Base Offset is Failure"<<std::endl;
+		std::cout<<m_rid -> comment<<std::endl<<std::endl;
+		return RTC::RTC_ERROR;
+	}
+
+	// サーボOFF
+	strcpy(m_command, "SERVO_OFF");
+	if(ActCommand() != RTC::RTC_OK) {
+		return RTC::RTC_ERROR;
+	}
 
 	return RTC::RTC_OK;
 }
@@ -515,81 +633,25 @@ RTC::ReturnCode_t ScaraRobotArRTC::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t ScaraRobotArRTC::onExecute(RTC::UniqueId ec_id)
 {
-	// マーカ座標値格納
 	double coord[3][3];
-
 	double dis[3][3];
 	double insec_k[3];
 	double insec[3][3];
-
-	// 目標値
 	double dis_mat[3][3];
-	double goal_mat[3][3];
-
-	/*** キューブを積み上げ ***/
-
-	// coord 初期化
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			coord[i][j] = 0;
-		}
-	}
 	
-	// 座標取得
-	for(int i = 0; i < 10; i++) {
-		Sleep(100);
-		m_CoordIn.read();
-		for(int j = 0; j < 3; j++) {
-			for(int k = 0; k < 3; k++) {
-				coord[k][j] = coord[k][j] + m_Coord.data[j + 3 * k];
-			}
-		}
-	}
-
-	// 移動平均値
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			coord[i][j] = coord[i][j] / 10;
-		}
-	}
-		
-	// 点と平面の距離 (z値の導出)
-	for(int i = 0; i < 3; i++) {
-		dis[i][2] = fabs(plane_coef[0] * coord[i][0] + plane_coef[1] * coord[i][1] + plane_coef[2] * coord[i][2] + plane_coef[3]) / sqrt(plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
-	}
-
-
-	// 点から平面に下ろした垂線と平面との交点の導出
-	for(int i = 0; i < 3; i++) {
-		insec_k[i] = -(plane_coef[0] * coord[i][0] + plane_coef[1] * coord[i][1] + plane_coef[2] * coord[i][2] + plane_coef[3]) / (plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
-	}
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			insec[j][i] = coord[j][i] + insec_k[j] * plane_coef[i];
-		}
-	}
-		
-	// 交点を座標変換行列に代入 (x値，y値の導出)
-	for(int i = 0; i < 2; i++) {
-		for(int j = 0; j < 3; j++) {
-		dis[j][i] = tmat[i][0] * insec[j][0] + tmat[i][1] * insec[j][1] + tmat[i][2] * insec[j][2] + tmat[i][3] * 1;
-		}
-	}
-
-	// マーカMが1番目
-	for(int i = 0; i < 3; i++) {
-		dis_mat[0][i] = dis[2][i];
-	}
-	// マーカTが2番目
-	for(int i = 0; i < 3; i++) {
-		dis_mat[1][i] = dis[1][i];
-	}
-	// マーカRが3番目
-	for(int i = 0; i < 3; i++) {
-		dis_mat[2][i] = dis[0][i];
+	/**************************************/
+	/********** キューブ積み上げ **********/
+	/**************************************/
+	
+	if(GetAsyncKeyState(VK_ESCAPE)) {
+		std::cout<<"Exit loop and deactivate RTC"<<std::endl;
+		std::cout<<"Please wait..."<<std::endl;
+		this->get_context(0)->deactivate_component(this->getObjRef());
+		return RTC::RTC_OK;
 	}
 
 	// 目標位置
+	double goal_mat[3][3];
 	goal_mat[0][0] = -0.012;	// マーカM
 	goal_mat[0][1] = 0.0;
 	goal_mat[0][2] = 0.005;
@@ -598,78 +660,210 @@ RTC::ReturnCode_t ScaraRobotArRTC::onExecute(RTC::UniqueId ec_id)
 	goal_mat[1][2] = 0.005;
 	goal_mat[2][0] = 0.0;		// マーカR
 	goal_mat[2][1] = 0.0;
-	goal_mat[2][2] = 0.030;
-
-	// (0-1)ロボットを初期位置へ
-	strcpy(m_command, "CMVS");
-	m_Buf[0] = 0; // [rad]
-	m_Buf[1] = 0; // [rad]
-	m_Buf[2] = 0.06; //[m]
-	m_Buf[3] = 0; //[rad]
-	if(ActCommand() != RTC::RTC_OK) {
-		return RTC::RTC_ERROR;
-	}
-			
-	// (0-2)ハンドを開いておく
-	strcpy(m_command, "HAND_OPEN");
-	if(ActCommand() != RTC::RTC_OK) {
-		return RTC::RTC_ERROR;
-	}
-			
+	goal_mat[2][2] = 0.025;
+	
 	for(int i = 0; i < 3; i++) {
 
+		// (0-1)アームを初期位置へ移動
+		if(m_RobotName == "SCARA") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = 0.06;	// [m]
+			m_Buf[3] = 0;		// [rad]
+			
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = M_PI/2;	// [rad]
+			m_Buf[3] = 0;		// [rad]
+			m_Buf[4] = M_PI/2;	// [rad]
+			m_Buf[5] = 0;		// [rad]
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+			return RTC::RTC_ERROR;
+		}
+		strcpy(m_command, "JMOV");
+		if(ActCommand() != RTC::RTC_OK) {
+			return RTC::RTC_ERROR;
+		}
+
+		// (0-2)ハンドを開いておく
+		if(m_RobotName == "MITSUBISHI") {
+			strcpy(m_command, "HAND_CLOSE");
+			if(ActCommand() != RTC::RTC_OK) {
+				return RTC::RTC_ERROR;
+			}
+		}
+		strcpy(m_command, "HAND_OPEN");
+		if(ActCommand() != RTC::RTC_OK) {
+			return RTC::RTC_ERROR;
+		}
+
+		// coord 初期化
+		for(int j = 0; j < 3; j++) {
+			for(int k = 0; k < 3; k++) {
+				coord[j][k] = 0;
+			}
+		}
+	
+		// 座標取得
+		for(int j = 0; j < 10; j++) {
+			Sleep(100);
+			m_CoordIn.read();
+			for(int k = 0; k < 3; k++) {
+				for(int l = 0; l < 3; l++) {
+					coord[l][k] = coord[l][k] + m_Coord.data[k + 3 * l]; // [m]
+				}
+			}
+		}
+
+		// 移動平均値
+		for(int j = 0; j < 3; j++) {
+			for(int k = 0; k < 3; k++) {
+				coord[j][k] = coord[j][k] / 10;
+			}
+		}
+		
+		// 点と平面の距離 (z値の導出)
+		for(int j = 0; j < 3; j++) {
+			dis[j][2] = fabs(plane_coef[0] * coord[j][0] + plane_coef[1] * coord[j][1] + plane_coef[2] * coord[j][2] + plane_coef[3]) / sqrt(plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
+		}
+
+
+		// 点から平面に下ろした垂線と平面との交点の導出
+		for(int j = 0; j < 3; j++) {
+			insec_k[j] = -(plane_coef[0] * coord[j][0] + plane_coef[1] * coord[j][1] + plane_coef[2] * coord[j][2] + plane_coef[3]) / (plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
+		}
+		for(int j = 0; j < 3; j++) {
+			for(int k = 0; k < 3; k++) {
+				insec[k][j] = coord[k][j] + insec_k[k] * plane_coef[j];
+			}
+		}
+		
+		// 交点を座標変換行列に代入 (x値，y値の導出)
+		for(int j = 0; j < 2; j++) {
+			for(int k = 0; k < 3; k++) {
+			dis[k][j] = tmat[j][0] * insec[k][0] + tmat[j][1] * insec[k][1] + tmat[j][2] * insec[k][2] + tmat[j][3] * 1;
+			}
+		}
+
+		// マーカMが1番目
+		for(int j = 0; j < 3; j++) {
+		dis_mat[0][j] = dis[2][j];
+		}
+		// マーカTが2番目
+		for(int j = 0; j < 3; j++) {
+		dis_mat[1][j] = dis[1][j];
+		}
+		// マーカRが3番目
+		for(int j = 0; j < 3; j++) {
+		dis_mat[2][j] = dis[0][j];
+		}
+
+		// ソフトリミット判定 (2015/11/20追加)
+		if(i == 0) { // マーカM
+			if(dis_mat[0][0] < -(m_CoordMaxX + 0.01) || dis_mat[0][0] > m_CoordMaxX + 0.01) { // x値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+			if(dis_mat[0][1] < -(m_CoordMaxY + 0.01) || dis_mat[0][1] > m_CoordMaxY + 0.01) { // y値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(i == 1) { // マーカT
+			if(dis_mat[1][0] < -(m_CoordMaxX + 0.01) || dis_mat[1][0] > m_CoordMaxX + 0.01) { // x値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+			if(dis_mat[1][1] < -(m_CoordMaxY + 0.01) || dis_mat[1][1] > m_CoordMaxY + 0.01) { // y値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(i == 2) { // マーカR
+			if(dis_mat[2][0] < -(m_CoordMaxX + 0.01) || dis_mat[2][0] > m_CoordMaxX + 0.01) { // x値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+			if(dis_mat[2][1] < -(m_CoordMaxY + 0.01) || dis_mat[2][1] > m_CoordMaxY + 0.01) { // y値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else {
+			return RTC::RTC_ERROR;
+		}
+
 		// (1-1)マーカ位置まで近づく動作
-		m_Buf[0] = dis_mat[i][0] / 1000; // X[m]
-		m_Buf[1] = dis_mat[i][1] / 1000; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = dis_mat[i][0];	// X[m]
+		m_Buf[1] = dis_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		strcpy(m_command, "CMVS");
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 				
 		// (1-2)マーカ位置で下がる動作
-		m_Buf[0] = dis_mat[i][0] / 1000; // X[m]
-		m_Buf[1] = dis_mat[i][1] / 1000; // Y[m]
-		m_Buf[2] = 0.005; //Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = dis_mat[i][0];	// X[m]
+		m_Buf[1] = dis_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.005;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		strcpy(m_command, "CMOV");
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-3)マーカ位置でつかむ動作
-		m_Buf[0] = 50;
-		strcpy(m_command, "HAND_MOV");
-		if(ActCommand() != RTC::RTC_OK) {
+		if(m_RobotName == "SCARA") {
+			m_Buf[0] = 40;
+			strcpy(m_command, "HAND_MOV");
+			if(ActCommand() != RTC::RTC_OK) {
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_digitalOutput.data[0] = 1;
+			m_digitalOutput.data[1] = 1;
+			m_digitalOutputOut.write();
+			Sleep(200);
+			m_digitalOutput.data[0] = 0;
+			m_digitalOutput.data[1] = 0;
+			m_digitalOutputOut.write();
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
 			return RTC::RTC_ERROR;
 		}
-
+		
 		// (1-4)マーカ位置で上がる動作
-		m_Buf[0] = dis_mat[i][0] / 1000; // X[m]
-		m_Buf[1] = dis_mat[i][1] / 1000; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = dis_mat[i][0];	// X[m]
+		m_Buf[1] = dis_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		strcpy(m_command, "CMOV");
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-5)目標位置へ移動
-		m_Buf[0] = goal_mat[i][0]; // X[m]
-		m_Buf[1] = goal_mat[i][1]; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = goal_mat[i][0];	// X[m]
+		m_Buf[1] = goal_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		strcpy(m_command, "CMVS");
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-6)目標位置で下がる動作
-		m_Buf[0] = goal_mat[i][0]; // X[m]
-		m_Buf[1] = goal_mat[i][1]; // Y[m]
-		m_Buf[2] = goal_mat[i][2]; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = goal_mat[i][0];	// X[m]
+		m_Buf[1] = goal_mat[i][1];	// Y[m]
+		m_Buf[2] = goal_mat[i][2];	// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		strcpy(m_command, "CMOV");
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
@@ -682,161 +876,247 @@ RTC::ReturnCode_t ScaraRobotArRTC::onExecute(RTC::UniqueId ec_id)
 		}
 
 		// (1-8)目標位置で上がる動作
-		m_Buf[0] = goal_mat[i][0]; // X[m]
-		m_Buf[1] = goal_mat[i][1]; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = goal_mat[i][0];	// X[m]
+		m_Buf[1] = goal_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		strcpy(m_command, "CMOV");
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 	}
 
-	/*** キューブを崩し ***/
-
-	// coord 初期化
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			coord[i][j] = 0;
-		}
-	}
+	/**********************************/
+	/********** キューブ崩し **********/
+	/**********************************/
 	
-	// 座標取得
-	for(int i = 0; i < 10; i++) {
-		Sleep(100);
-		m_CoordIn.read();
-		for(int j = 0; j < 3; j++) {
-			for(int k = 0; k < 3; k++) {
-				coord[k][j] = coord[k][j] + m_Coord.data[j + 3 * k];
-			}
-		}
-	}
-
-	// 移動平均値
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			coord[i][j] = coord[i][j] / 10;
-		}
-	}
-		
-	// 点と平面の距離 (z値の導出)
-	for(int i = 0; i < 3; i++) {
-		dis[i][2] = fabs(plane_coef[0] * coord[i][0] + plane_coef[1] * coord[i][1] + plane_coef[2] * coord[i][2] + plane_coef[3]) / sqrt(plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
-	}
-
-
-	// 点から平面に下ろした垂線と平面との交点の導出
-	for(int i = 0; i < 3; i++) {
-		insec_k[i] = -(plane_coef[0] * coord[i][0] + plane_coef[1] * coord[i][1] + plane_coef[2] * coord[i][2] + plane_coef[3]) / (plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
-	}
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
-			insec[j][i] = coord[j][i] + insec_k[j] * plane_coef[i];
-		}
-	}
-		
-	// 交点を座標変換行列に代入 (x値，y値の導出)
-	for(int i = 0; i < 2; i++) {
-		for(int j = 0; j < 3; j++) {
-		dis[j][i] = tmat[i][0] * insec[j][0] + tmat[i][1] * insec[j][1] + tmat[i][2] * insec[j][2] + tmat[i][3] * 1;
-		}
-	}
-	
-	// マーカRが1番目
-	for(int i = 0; i < 3; i++) {
-		dis_mat[0][i] = dis[0][i];
-	}
-	// マーカTが2番目
-	for(int i = 0; i < 3; i++) {
-		dis_mat[1][i] = dis[1][i];
-	}
-	// マーカMが3番目
-	for(int i = 0; i < 3; i++) {
-		dis_mat[2][i] = dis[2][i];
+	if(GetAsyncKeyState(VK_ESCAPE)) {
+		std::cout<<"Exit loop and deactivate RTC"<<std::endl;
+		std::cout<<"Please wait..."<<std::endl;
+		this->get_context(0)->deactivate_component(this->getObjRef());
+		return RTC::RTC_OK;
 	}
 
 	// 目標位置
-	goal_mat[0][0] = 0.020;
-	goal_mat[0][1] = -0.040;
+	goal_mat[0][0] = 0.030;
+	goal_mat[0][1] = -0.050;
 	goal_mat[0][2] = 0.005;
 	goal_mat[1][0] = -0.040;
-	goal_mat[1][1] = 0.030;
+	goal_mat[1][1] = 0.040;
 	goal_mat[1][2] = 0.005;
 	goal_mat[2][0] = 0.030;
-	goal_mat[2][1] = 0.050;
+	goal_mat[2][1] = 0.060;
 	goal_mat[2][2] = 0.005;
-
-	// (0-1)ロボットを初期位置へ
-	strcpy(m_command, "CMVS");
-	m_Buf[0] = 0; // [rad]
-	m_Buf[1] = 0; // [rad]
-	m_Buf[2] = 0.06; //[m]
-	m_Buf[3] = 0; //[rad]
-	if(ActCommand() != RTC::RTC_OK) {
-		return RTC::RTC_ERROR;
-	}
-			
-	// (0-2)ハンドを開いておく
-	strcpy(m_command, "HAND_OPEN");
-	if(ActCommand() != RTC::RTC_OK) {
-		return RTC::RTC_ERROR;
-	}
 			
 	for(int i = 0; i < 3; i++) {
 
+		// (0-1)アームを初期位置へ移動
+		if(m_RobotName == "SCARA") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = 0.06;	// [m]
+			m_Buf[3] = 0;		// [rad]
+			
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_Buf[0] = 0;		// [rad]
+			m_Buf[1] = 0;		// [rad]
+			m_Buf[2] = M_PI/2;	// [rad]
+			m_Buf[3] = 0;		// [rad]
+			m_Buf[4] = M_PI/2;	// [rad]
+			m_Buf[5] = 0;		// [rad]
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+			return RTC::RTC_ERROR;
+		}
+		strcpy(m_command, "JMOV");
+		if(ActCommand() != RTC::RTC_OK) {
+			return RTC::RTC_ERROR;
+		}
+	
+		// (0-2)ハンドを開いておく
+		if(m_RobotName == "MITSUBISHI") {
+			strcpy(m_command, "HAND_CLOSE");
+			if(ActCommand() != RTC::RTC_OK) {
+				return RTC::RTC_ERROR;
+			}
+		}
+		strcpy(m_command, "HAND_OPEN");
+		if(ActCommand() != RTC::RTC_OK) {
+			return RTC::RTC_ERROR;
+		}
+
+		// coord 初期化
+		for(int j = 0; j < 3; j++) {
+			for(int k = 0; k < 3; k++) {
+				coord[j][k] = 0;
+			}
+		}
+	
+		// 座標取得
+		for(int j = 0; j < 10; j++) {
+			Sleep(100);
+			m_CoordIn.read();
+			for(int k = 0; k < 3; k++) {
+				for(int l = 0; l < 3; l++) {
+					coord[l][k] = coord[l][k] + m_Coord.data[k + 3 * l]; // [m]
+				}
+			}
+		}
+
+		// 移動平均値
+		for(int j = 0; j < 3; j++) {
+			for(int k = 0; k < 3; k++) {
+				coord[j][k] = coord[j][k] / 10;
+			}
+		}
+		
+		// 点と平面の距離 (z値の導出)
+		for(int j = 0; j < 3; j++) {
+			dis[j][2] = fabs(plane_coef[0] * coord[j][0] + plane_coef[1] * coord[j][1] + plane_coef[2] * coord[j][2] + plane_coef[3]) / sqrt(plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
+		}
+
+
+		// 点から平面に下ろした垂線と平面との交点の導出
+		for(int j = 0; j < 3; j++) {
+			insec_k[j] = -(plane_coef[0] * coord[j][0] + plane_coef[1] * coord[j][1] + plane_coef[2] * coord[j][2] + plane_coef[3]) / (plane_coef[0] * plane_coef[0] + plane_coef[1] * plane_coef[1] + plane_coef[2] * plane_coef[2]);
+		}
+		for(int j = 0; j < 3; j++) {
+			for(int k = 0; k < 3; k++) {
+				insec[k][j] = coord[k][j] + insec_k[k] * plane_coef[j];
+			}
+		}
+		
+		// 交点を座標変換行列に代入 (x値，y値の導出)
+		for(int j = 0; j < 2; j++) {
+			for(int k = 0; k < 3; k++) {
+			dis[k][j] = tmat[j][0] * insec[k][0] + tmat[j][1] * insec[k][1] + tmat[j][2] * insec[k][2] + tmat[j][3] * 1;
+			}
+		}
+	
+		// マーカRが1番目
+		for(int j = 0; j < 3; j++) {
+			dis_mat[0][j] = dis[0][j];
+		}
+		// マーカTが2番目
+		for(int j = 0; j < 3; j++) {
+			dis_mat[1][j] = dis[1][j];
+		}
+		// マーカMが3番目
+		for(int j = 0; j < 3; j++) {
+			dis_mat[2][j] = dis[2][j];
+		}
+
+		// ソフトリミット判定 (2015/11/20追加)
+		if(i == 0) { // マーカR
+			if(dis_mat[0][0] < -(m_CoordMaxX + 0.01) || dis_mat[0][0] > m_CoordMaxX + 0.01) { // x値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+			if(dis_mat[0][1] < -(m_CoordMaxY + 0.01) || dis_mat[0][1] > m_CoordMaxY + 0.01) { // y値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(i == 1) { // マーカT
+			if(dis_mat[1][0] < -(m_CoordMaxX + 0.01) || dis_mat[1][0] > m_CoordMaxX + 0.01) { // x値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+			if(dis_mat[1][1] < -(m_CoordMaxY + 0.01) || dis_mat[1][1] > m_CoordMaxY + 0.01) { // y値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(i == 2) { // マーカM
+			if(dis_mat[2][0] < -(m_CoordMaxX + 0.01) || dis_mat[2][0] > m_CoordMaxX + 0.01) { // x値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+			if(dis_mat[2][1] < -(m_CoordMaxY + 0.01) || dis_mat[2][1] > m_CoordMaxY + 0.01) { // y値
+				std::cout<<"Cartesian soft limits over!!"<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else {
+			return RTC::RTC_ERROR;
+		}
+
 		// (1-1)マーカ位置まで近づく動作
 		strcpy(m_command, "CMVS");
-		m_Buf[0] = dis_mat[i][0] / 1000; // X[m]
-		m_Buf[1] = dis_mat[i][1] / 1000; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = dis_mat[i][0];	// X[m]
+		m_Buf[1] = dis_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 				
 		// (1-2)マーカ位置で下がる動作
 		strcpy(m_command, "CMOV");
-		m_Buf[0] = dis_mat[i][0] / 1000; // X[m]
-		m_Buf[1] = dis_mat[i][1] / 1000; // Y[m]
-		m_Buf[2] = dis_mat[i][2] / 1000 + 0.005 + 0.005; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = dis_mat[i][0];			// X[m]
+		m_Buf[1] = dis_mat[i][1];			// Y[m]
+		if(i == 0) {
+			m_Buf[2] = 0.030;	// Z[m]
+		}
+		else {
+			m_Buf[2] = 0.005;	// Z[m]
+		}
+		m_Buf[3] = 0.0;						// C[rad]
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-3)マーカ位置でつかむ動作
 		strcpy(m_command, "HAND_MOV");
-		m_Buf[0] = 50;
-		if(ActCommand() != RTC::RTC_OK) {
+		if(m_RobotName == "SCARA") {
+			m_Buf[0] = 40;
+			strcpy(m_command, "HAND_MOV");
+			if(ActCommand() != RTC::RTC_OK) {
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_digitalOutput.data[0] = 1;
+			m_digitalOutput.data[1] = 1;
+			m_digitalOutputOut.write();
+			Sleep(200);
+			m_digitalOutput.data[0] = 0;
+			m_digitalOutput.data[1] = 0;
+			m_digitalOutputOut.write();
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-4)マーカ位置で上がる動作
 		strcpy(m_command, "CMOV");
-		m_Buf[0] = dis_mat[i][0] / 1000; // X[m]
-		m_Buf[1] = dis_mat[i][1] / 1000; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = dis_mat[i][0];	// X[m]
+		m_Buf[1] = dis_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-5)目標位置へ移動
 		strcpy(m_command, "CMVS");
-		m_Buf[0] = goal_mat[i][0]; // X[m]
-		m_Buf[1] = goal_mat[i][1]; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = goal_mat[i][0];	// X[m]
+		m_Buf[1] = goal_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
 
 		// (1-6)目標位置で下がる動作
 		strcpy(m_command, "CMOV");
-		m_Buf[0] = goal_mat[i][0]; // X[m]
-		m_Buf[1] = goal_mat[i][1]; // Y[m]
-		m_Buf[2] = 0.005; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = goal_mat[i][0];	// X[m]
+		m_Buf[1] = goal_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.01;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
@@ -849,10 +1129,10 @@ RTC::ReturnCode_t ScaraRobotArRTC::onExecute(RTC::UniqueId ec_id)
 
 		// (1-8)目標位置で上がる動作
 		strcpy(m_command, "CMOV");
-		m_Buf[0] = goal_mat[i][0]; // X[m]
-		m_Buf[1] = goal_mat[i][1]; // Y[m]
-		m_Buf[2] = 0.06; // Z[m]
-		m_Buf[3] = 0.0; // C[rad]
+		m_Buf[0] = goal_mat[i][0];	// X[m]
+		m_Buf[1] = goal_mat[i][1];	// Y[m]
+		m_Buf[2] = 0.06;			// Z[m]
+		m_Buf[3] = 0.0;				// C[rad]
 		if(ActCommand() != RTC::RTC_OK) {
 			return RTC::RTC_ERROR;
 		}
@@ -868,6 +1148,23 @@ RTC::ReturnCode_t ScaraRobotArRTC::onAborting(RTC::UniqueId ec_id)
 	std::cout<<"            Error             "<<std::endl;
 	std::cout<<"******************************"<<std::endl<<std::endl;
 	
+	// ベースオフセット初期化
+	offset[0][0] = 1.0; offset[0][1] = 0.0; offset[0][2] = 0.0; offset[0][3] = 0.0;
+	offset[1][0] = 0.0; offset[1][1] = 1.0; offset[1][2] = 0.0; offset[1][3] = 0.0;
+	offset[2][0] = 0.0; offset[2][1] = 0.0; offset[2][2] = 1.0; offset[2][3] = 0.0;
+	m_rid = m_JARA_ARM_ManipulatorCommonInterface_Middle -> setBaseOffset(offset);
+	if(m_rid -> id != 0) { // Error
+		std::cout<<"Set Base Offset is Failure"<<std::endl;
+		std::cout<<m_rid -> comment<<std::endl<<std::endl;
+		return RTC::RTC_ERROR;
+	}
+
+	// サーボOFF
+	strcpy(m_command, "SERVO_OFF");
+	if(ActCommand() != RTC::RTC_OK) {
+		return RTC::RTC_ERROR;
+	}
+
 	return RTC::RTC_OK;
 }
 
@@ -898,6 +1195,8 @@ RTC::ReturnCode_t ScaraRobotArRTC::onRateChanged(RTC::UniqueId ec_id)
   return RTC::RTC_OK;
 }
 */
+
+
 
 RTC::ReturnCode_t ScaraRobotArRTC::Gauss3(double wmat[][4])
 {
@@ -987,7 +1286,7 @@ RTC::ReturnCode_t ScaraRobotArRTC::ActCommand()
 	if(strcmp(m_command,"SERVO_OFF") == 0){//サーボOFF
 		
 		std::cout<<"ServoOFF"<<std::endl;
-		m_rid=m_ManipulatorCommonInterface_Common->servoOFF();
+		m_rid=m_JARA_ARM_ManipulatorCommonInterface_Common->servoOFF();
 		if(m_rid->id != 0){//Error
 			std::cout<<"ServoOFF is Failure"<<std::endl;
 			std::cout<<m_rid->comment<<std::endl<<std::endl;
@@ -999,7 +1298,7 @@ RTC::ReturnCode_t ScaraRobotArRTC::ActCommand()
 	}else if(strcmp(m_command,"SERVO_ON") == 0){//サーボON
 
 		std::cout<<"ServoON"<<std::endl;
-		m_rid=m_ManipulatorCommonInterface_Common->servoON();
+		m_rid=m_JARA_ARM_ManipulatorCommonInterface_Common->servoON();
 		if(m_rid->id != 0){//Error
 			std::cout<<"ServoON is Failure"<<std::endl;
 			std::cout<<m_rid->comment<<std::endl<<std::endl;
@@ -1010,35 +1309,51 @@ RTC::ReturnCode_t ScaraRobotArRTC::ActCommand()
 
 	}else if(strcmp(m_command,"HAND_CLOSE") == 0){//ハンドクローズ
 
-		std::cout<<"Close Gripper"<<std::endl;
-		m_rid=m_ManipulatorCommonInterface_Middle->closeGripper();
-		if(m_rid->id != 0){//Error
-			std::cout<<"Close Gripper is Failure"<<std::endl;
-			std::cout<<m_rid->comment<<std::endl<<std::endl;
+		//std::cout<<"Close Gripper"<<std::endl;
+		if(m_RobotName == "SCARA") {
+		
+			m_rid=m_JARA_ARM_ManipulatorCommonInterface_Middle->closeGripper();
+			if(m_rid->id != 0){//Error
+				std::cout<<"Close Gripper is Failure"<<std::endl;
+				std::cout<<m_rid->comment<<std::endl<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_digitalOutput.data[0] = 1;
+			m_digitalOutput.data[1] = 1;
+			m_digitalOutputOut.write();
+			Sleep(350);
+			m_digitalOutput.data[0] = 0;
+			m_digitalOutput.data[1] = 0;
+			m_digitalOutputOut.write();
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
-		Sleep(120000/m_Speed-2000);
+		Sleep(120000/m_Speed-1000);
 
 	}else if(strcmp(m_command,"HAND_MOV") == 0){//ハンド動作
 
-		std::cout<<"Move Gripper"<<std::endl;
+		//std::cout<<"Move Gripper"<<std::endl;
 		if((m_Buf[0] < 0)||(m_Buf[0] > 100)){
 			std::cout<<"Value is Wrong"<<std::endl<<std::endl;
 			return RTC::RTC_ERROR;
 		}
-		m_rid=m_ManipulatorCommonInterface_Middle->moveGripper((JARA_ARM::ULONG)m_Buf[0]);
+		m_rid=m_JARA_ARM_ManipulatorCommonInterface_Middle->moveGripper((JARA_ARM::ULONG)m_Buf[0]);
 		if(m_rid->id != 0){//Error
 			std::cout<<"Move Gripper is Failure"<<std::endl;
 			std::cout<<m_rid->comment<<std::endl<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
-		Sleep(120000/m_Speed-2000);
+		Sleep(120000/m_Speed-1000);
 
 	}else if(strcmp(m_command,"CMVS") == 0){//直交座標系の直線補間(絶対指令)
 
-		std::cout<<"Move Linear Cartesian Abs"<<std::endl;
+		//std::cout<<"Move Linear Cartesian Abs"<<std::endl;
 
 		JARA_ARM::CarPosWithElbow pos;
 		m_Buf[0] = m_Buf[0];//X[m]
@@ -1046,39 +1361,69 @@ RTC::ReturnCode_t ScaraRobotArRTC::ActCommand()
 		m_Buf[2] = m_Buf[2];//Z[m]
 		m_Buf[3]=m_Buf[3];//C[rad]
 
-		//姿勢はX->Y->Z回転での値
-		//1列目
-		pos.carPos[0][0]=cos(m_Buf[3]);
-		pos.carPos[1][0]=sin(m_Buf[3]);
-		pos.carPos[2][0]=0.0;
+		if(m_RobotName == "SCARA") {
+			//姿勢はX->Y->Z回転での値
+			//1列目
+			pos.carPos[0][0]=cos(m_Buf[3]);
+			pos.carPos[1][0]=sin(m_Buf[3]);
+			pos.carPos[2][0]=0.0;
 			
-		//2列目
-		pos.carPos[0][1]=-sin(m_Buf[3]);
-		pos.carPos[1][1]=cos(m_Buf[3]);
-		pos.carPos[2][1]=0.0;
+			//2列目
+			pos.carPos[0][1]=-sin(m_Buf[3]);
+			pos.carPos[1][1]=cos(m_Buf[3]);
+			pos.carPos[2][1]=0.0;
 			
-		//3列目
-		pos.carPos[0][2]=0.0;
-		pos.carPos[1][2]=0.0;
-		pos.carPos[2][2]=1.0;
+			//3列目
+			pos.carPos[0][2]=0.0;
+			pos.carPos[1][2]=0.0;
+			pos.carPos[2][2]=1.0;
 			
-		//4列目
-		pos.carPos[0][3]=m_Buf[0];
-		pos.carPos[1][3]=m_Buf[1];
-		pos.carPos[2][3]=m_Buf[2];
+			//4列目
+			pos.carPos[0][3]=m_Buf[0];
+			pos.carPos[1][3]=m_Buf[1];
+			pos.carPos[2][3]=m_Buf[2];
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			//姿勢はX->Y->Z回転での値
+			//1列目
+			pos.carPos[0][0]=-cos(m_Buf[3]);
+			pos.carPos[1][0]=-sin(m_Buf[3]);
+			pos.carPos[2][0]=0.0;
+			
+			//2列目
+			pos.carPos[0][1]=-sin(m_Buf[3]);
+			pos.carPos[1][1]=cos(m_Buf[3]);
+			pos.carPos[2][1]=0.0;
+			
+			//3列目
+			pos.carPos[0][2]=0.0;
+			pos.carPos[1][2]=0.0;
+			pos.carPos[2][2]=-1.0;
+			
+			//4列目
+			pos.carPos[0][3]=m_Buf[0];
+			pos.carPos[1][3]=m_Buf[1];
+			pos.carPos[2][3]=m_Buf[2];
 
-		m_rid=m_ManipulatorCommonInterface_Middle->moveLinearCartesianAbs(pos);
+			pos.structFlag = 7;
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+			return RTC::RTC_ERROR;
+		}
+
+		m_rid=m_JARA_ARM_ManipulatorCommonInterface_Middle->moveLinearCartesianAbs(pos);
 		if(m_rid->id != 0){//Error
 			std::cout<<"Move Linear Cartesian Abs is Failure"<<std::endl;
 			std::cout<<m_rid->comment<<std::endl<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
-		Sleep(180000/m_Speed-2000);
+		Sleep(180000/m_Speed-1000);
 
 	}else if(strcmp(m_command,"CMOV") == 0){//PTP補間動作(直交座標系)
 
-		std::cout<<"Move PTP Cartesian Abs"<<std::endl;
+		//std::cout<<"Move PTP Cartesian Abs"<<std::endl;
 
 		JARA_ARM::CarPosWithElbow pos;
 		m_Buf[0] = m_Buf[0];//X[m]
@@ -1086,67 +1431,128 @@ RTC::ReturnCode_t ScaraRobotArRTC::ActCommand()
 		m_Buf[2] = m_Buf[2];//Z[m]
 		m_Buf[3]=m_Buf[3];//C[rad]
 
-		//姿勢はX->Y->Z回転での値
-		//1列目
-		pos.carPos[0][0]=cos(m_Buf[3]);
-		pos.carPos[1][0]=sin(m_Buf[3]);
-		pos.carPos[2][0]=0.0;
+		if(m_RobotName == "SCARA") {
+			//姿勢はX->Y->Z回転での値
+			//1列目
+			pos.carPos[0][0]=cos(m_Buf[3]);
+			pos.carPos[1][0]=sin(m_Buf[3]);
+			pos.carPos[2][0]=0.0;
 			
-		//2列目
-		pos.carPos[0][1]=-sin(m_Buf[3]);
-		pos.carPos[1][1]=cos(m_Buf[3]);
-		pos.carPos[2][1]=0.0;
+			//2列目
+			pos.carPos[0][1]=-sin(m_Buf[3]);
+			pos.carPos[1][1]=cos(m_Buf[3]);
+			pos.carPos[2][1]=0.0;
 			
-		//3列目
-		pos.carPos[0][2]=0.0;
-		pos.carPos[1][2]=0.0;
-		pos.carPos[2][2]=1.0;
+			//3列目
+			pos.carPos[0][2]=0.0;
+			pos.carPos[1][2]=0.0;
+			pos.carPos[2][2]=1.0;
 			
-		//4列目
-		pos.carPos[0][3]=m_Buf[0];
-		pos.carPos[1][3]=m_Buf[1];
-		pos.carPos[2][3]=m_Buf[2];
+			//4列目
+			pos.carPos[0][3]=m_Buf[0];
+			pos.carPos[1][3]=m_Buf[1];
+			pos.carPos[2][3]=m_Buf[2];
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			//姿勢はX->Y->Z回転での値
+			//1列目
+			pos.carPos[0][0]=-cos(m_Buf[3]);
+			pos.carPos[1][0]=-sin(m_Buf[3]);
+			pos.carPos[2][0]=0.0;
+			
+			//2列目
+			pos.carPos[0][1]=-sin(m_Buf[3]);
+			pos.carPos[1][1]=cos(m_Buf[3]);
+			pos.carPos[2][1]=0.0;
+			
+			//3列目
+			pos.carPos[0][2]=0.0;
+			pos.carPos[1][2]=0.0;
+			pos.carPos[2][2]=-1.0;
+			
+			//4列目
+			pos.carPos[0][3]=m_Buf[0];
+			pos.carPos[1][3]=m_Buf[1];
+			pos.carPos[2][3]=m_Buf[2];
 
-		m_rid=m_ManipulatorCommonInterface_Middle->movePTPCartesianAbs(pos);
+			pos.structFlag = 7;
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+			return RTC::RTC_ERROR;
+		}
+
+		m_rid=m_JARA_ARM_ManipulatorCommonInterface_Middle->movePTPCartesianAbs(pos);
 		if(m_rid->id != 0){//Error
 			std::cout<<"Move PTP Cartesian Abs is Failure"<<std::endl;
 			std::cout<<m_rid->comment<<std::endl<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
-		Sleep(180000/m_Speed-2000);
+		Sleep(180000/m_Speed-1000);
 
 	}else if(strcmp(m_command,"JMOV") == 0){//関節座標系の直線補間(関節・絶対指令)
 
-		std::cout<<"Move PTP Joint Abs"<<std::endl;
+		//std::cout<<"Move PTP Joint Abs"<<std::endl;
 
 		JARA_ARM::JointPos jnt;
-		jnt.length(4);
-		jnt[0]=m_Buf[0];//[rad]
-		jnt[1]=m_Buf[1];//[rad]
-		jnt[2]=m_Buf[2];//[m]
-		jnt[3]=m_Buf[3];//[rad]
 
-		m_rid=m_ManipulatorCommonInterface_Middle->movePTPJointAbs(jnt);
+		if(m_RobotName == "SCARA") {
+			jnt.length(4);
+			jnt[0]=m_Buf[0];//[rad]
+			jnt[1]=m_Buf[1];//[rad]
+			jnt[2]=m_Buf[2];//[m]
+			jnt[3]=m_Buf[3];//[rad]
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			jnt.length(6);
+			jnt[0]=m_Buf[0];//[rad]
+			jnt[1]=m_Buf[1];//[rad]
+			jnt[2]=m_Buf[2];//[rad]
+			jnt[3]=m_Buf[3];//[rad]
+			jnt[4]=m_Buf[4];//[rad]
+			jnt[5]=m_Buf[5];//[rad]
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
+			return RTC::RTC_ERROR;
+		}
+
+		m_rid=m_JARA_ARM_ManipulatorCommonInterface_Middle->movePTPJointAbs(jnt);
 		if(m_rid->id != 0){//Error
 			std::cout<<"Move PTP Joint Abs is Failure"<<std::endl;
 			std::cout<<m_rid->comment<<std::endl<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
-		Sleep(180000/m_Speed-2000);
+		Sleep(180000/m_Speed-1000);
 
 	}else if(strcmp(m_command,"HAND_OPEN") == 0){//ハンドオープン
 
-		std::cout<<"Open Gripper"<<std::endl;
-		m_rid=m_ManipulatorCommonInterface_Middle->openGripper();
-		if(m_rid->id != 0){//Error
-			std::cout<<"Open Gripper is Failure"<<std::endl;
-			std::cout<<m_rid->comment<<std::endl<<std::endl;
+		//std::cout<<"Open Gripper"<<std::endl;
+		if(m_RobotName == "SCARA") {
+			m_rid=m_JARA_ARM_ManipulatorCommonInterface_Middle->openGripper();
+			if(m_rid->id != 0){//Error
+				std::cout<<"Open Gripper is Failure"<<std::endl;
+				std::cout<<m_rid->comment<<std::endl<<std::endl;
+				return RTC::RTC_ERROR;
+			}
+		}
+		else if(m_RobotName == "MITSUBISHI") {
+			m_digitalOutput.data[0] = 1;
+			m_digitalOutput.data[1] = 0;
+			m_digitalOutputOut.write();
+			Sleep(200);
+			m_digitalOutput.data[0] = 0;
+			m_digitalOutput.data[1] = 0;
+			m_digitalOutputOut.write();
+		}
+		else {
+			std::cout<<"Unknown ROBOT_NAME"<<std::endl;
 			return RTC::RTC_ERROR;
 		}
 
-		Sleep(120000/m_Speed-2000);
+		Sleep(120000/m_Speed-1000);
 
 	}else{//定義されていないコマンド
 

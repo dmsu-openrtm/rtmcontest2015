@@ -8,12 +8,12 @@
 
 #   rtc-template -bcxx --module-name=VS_ASR_RTC 
 #   --module-desc='ModuleDescription' --module-version=1.0.0 --module-vendor=Saitama Univ. Design Lab. 
-#   --module-category=Category --module-comp-type=STATIC 
+#   --module-category=Industrial Robot --module-comp-type=STATIC 
 #   --module-act-type=PERIODIC --module-max-inst=1 
 #   --config=servoNum:int:5 
-#   --service-idl=C:\Users\Nogiwa\workspace\idl\ManipulatorCommonInterface_Common.idl --service-idl=C:\Users\Nogiwa\workspace\idl\ManipulatorCommonInterface_MiddleLevel.idl 
-#   --service=ManipulatorCommonInterface_Common:ManipulatorCommonInterface_Common:JARA_ARM::ManipulatorCommonInterface_Common 
-#   --service=ManipulatorCommonInterface_Middle:ManipulatorCommonInterface_Middle:JARA_ARM::ManipulatorCommonInterface_Middle 
+#   --service-idl=C:\Users\fujima\Desktop\IDL\ManipulatorCommonInterface_Common.idl --service-idl=C:\Users\fujima\Desktop\IDL\ManipulatorCommonInterface_MiddleLevel.idl 
+#   --service=ManipulatorCommonInterface_Common:JARA_ARM_ManipulatorCommonInterface_Common:JARA_ARM::ManipulatorCommonInterface_Common 
+#   --service=ManipulatorCommonInterface_Middle:JARA_ARM_ManipulatorCommonInterface_Middle:JARA_ARM::ManipulatorCommonInterface_Middle 
 
 
 ======================================================================
@@ -24,7 +24,7 @@ Module Name: VS_ASR_RTC
 Description: ModuleDescription
 Version:     1.0.0
 Vendor:      Saitama Univ. Design Lab.
-Category:    Category
+Category:    Industrial Robot
 Kind:        DataFlowComponent
 Comp. Type:  STATIC
 Act. Type:   PERIODIC
@@ -88,7 +88,7 @@ Lang Type:
 	Description: 
 	Interface:   
 		[Service Provider Interfaces]
-		Name:          ManipulatorCommonInterface_Common
+		Name:          JARA_ARM_ManipulatorCommonInterface_Common
 		Type:          JARA_ARM::ManipulatorCommonInterface_Common
 		Description:   
 		Argument:      
@@ -100,7 +100,7 @@ Lang Type:
 	Description: 
 	Interface:   
 		[Service Provider Interfaces]
-		Name:          ManipulatorCommonInterface_Middle
+		Name:          JARA_ARM_ManipulatorCommonInterface_Middle
 		Type:          JARA_ARM::ManipulatorCommonInterface_Middle
 		Description:   
 		Argument:      

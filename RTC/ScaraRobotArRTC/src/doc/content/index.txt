@@ -109,6 +109,8 @@ Parameter        Data type          Default Value    Effect
 Speed            int                30               
 BaseOffsetX      double             0.0              
 BaseOffsetY      double             0.0              
+BaseOffsetZ      double             0.0              
+RobotName        string             ROBOT_NAME       
 ================ ================== ================ ======
 
 Ports
@@ -120,8 +122,9 @@ The ports provided by the component are described below:
 Name            Type        Data type                      Purpose
 =============== =========== ============================== =======
 Coord           InPort      RTC::TimedDoubleSeq            
-ManipulatorCommonInterface_Common ServicePort JARA_ARM::ManipulatorCommonInterface_Common 
-ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
+digitalOutput   OutPort     RTC::TimedBooleanSeq           
+JARA_ARM_ManipulatorCommonInterface_Common ServicePort JARA_ARM::ManipulatorCommonInterface_Common 
+JARA_ARM_ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
 =============== =========== ============================== =======
 
 Examples

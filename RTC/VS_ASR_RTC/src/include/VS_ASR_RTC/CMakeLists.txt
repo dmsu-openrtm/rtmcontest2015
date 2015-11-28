@@ -1,7 +1,4 @@
 set(hdrs VS_ASR_RTC.h
-	defreturnid.h
-	useSilabs.h
-    PARENT_SCOPE
     ManipulatorCommonInterface_CommonSVC_impl.h
     ManipulatorCommonInterface_MiddleLevelSVC_impl.h
     )

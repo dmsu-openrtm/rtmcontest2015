@@ -30,7 +30,7 @@ static const char* detectarmarkerrtc_spec[] =
     "conf.default.PatternName1", "Data/patt_r",
     "conf.default.PatternName2", "Data/patt_t",
     "conf.default.PatternName3", "Data/patt_m",
-    "conf.default.PatternWidth", "17.0",
+    "conf.default.PatternWidth", "0.017",
     // Widget
     "conf.__widget__.VideoConf", "text",
     "conf.__widget__.CameraPara", "text",
@@ -89,7 +89,7 @@ RTC::ReturnCode_t DetectArMarkerRTC::onInitialize()
   bindParameter("PatternName1", m_PatternName1, "Data/patt_r");
   bindParameter("PatternName2", m_PatternName2, "Data/patt_t");
   bindParameter("PatternName3", m_PatternName3, "Data/patt_m");
-  bindParameter("PatternWidth", m_PatternWidth, "17.0");
+  bindParameter("PatternWidth", m_PatternWidth, "0.017");
   
   // </rtc-template>
   return RTC::RTC_OK;
@@ -123,10 +123,12 @@ RTC::ReturnCode_t DetectArMarkerRTC::onActivated(RTC::UniqueId ec_id)
 	std::cout<<"********** onActivated **********"<<std::endl;
 	std::cout<<"*********************************"<<std::endl;
 
+	m_Coord.data.length(9);
+
 	std::cout<<std::endl<<"*******************************"<<std::endl;
 	std::cout<<"********** onExecute **********"<<std::endl;
 	std::cout<<"*******************************"<<std::endl;
-
+	
 	return RTC::RTC_OK;
 }
 
@@ -147,6 +149,8 @@ RTC::ReturnCode_t DetectArMarkerRTC::onExecute(RTC::UniqueId ec_id)
 	{
 		return RTC::RTC_ERROR;
 	}
+	
+	this->get_context(0)->deactivate_component(this->getObjRef());
 	
 	return RTC::RTC_OK;
 }

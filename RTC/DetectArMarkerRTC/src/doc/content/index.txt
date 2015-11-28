@@ -111,7 +111,7 @@ CameraPara       string             Data/camera_para.dat
 PatternName1     string             Data/patt_r      
 PatternName2     string             Data/patt_t      
 PatternName3     string             Data/patt_m      
-PatternWidth     double             17.0             
+PatternWidth     double             0.017            
 ================ ================== ================ ======
 
 Ports

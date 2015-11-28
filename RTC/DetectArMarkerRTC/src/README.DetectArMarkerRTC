@@ -10,7 +10,7 @@
 #   --module-desc='ModuleDescription' --module-version=1.0.0 --module-vendor=Saitama Univ. Design Lab. 
 #   --module-category=Category --module-comp-type=STATIC 
 #   --module-act-type=PERIODIC --module-max-inst=1 
-#   --config=VideoConf:string:Data/WDM_camera_flipV.xml --config=CameraPara:string:Data/camera_para.dat --config=PatternName1:string:Data/patt_r --config=PatternName2:string:Data/patt_t --config=PatternName3:string:Data/patt_m --config=PatternWidth:double:17.0 
+#   --config=VideoConf:string:Data/WDM_camera_flipV.xml --config=CameraPara:string:Data/camera_para.dat --config=PatternName1:string:Data/patt_r --config=PatternName2:string:Data/patt_t --config=PatternName3:string:Data/patt_m --config=PatternWidth:double:0.017 
 #   --outport=Coord:RTC::TimedDoubleSeq 
 
 
@@ -150,7 +150,7 @@ Lang Type:
 		Name:             PatternWidth
 		Description:     
 		Type:            double
-		DefaultValue:     17.0
+		DefaultValue:     0.017
 		Unit:            
 		Range:           
 		Constraint:      

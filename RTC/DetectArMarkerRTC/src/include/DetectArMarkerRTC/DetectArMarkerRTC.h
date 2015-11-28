@@ -26,7 +26,8 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glut.h>
+//#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #include <AR/ar.h>
 #include <AR/gsub.h>
@@ -36,9 +37,17 @@
 #include <math.h>
 #include <io.h>
 #include <iostream>
+#include <iomanip>
 #include <fcntl.h>
 
 bool AR_finder(LPVOID pParam);
+static void init(void);	
+static void mainloop(void);
+void draw(int mid, double patt_trans[3][4]);
+static void setupLighting(void);
+static void setupMaterial(void);
+static void cleanup(void);
+static void keyEvent(unsigned char key, int x, int y);
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -277,7 +286,7 @@ class DetectArMarkerRTC
   /*!
    * 
    * - Name:  PatternWidth
-   * - DefaultValue: 17.0
+   * - DefaultValue: 0.017
    */
   double m_PatternWidth;
   // </rtc-template>
@@ -311,6 +320,20 @@ class DetectArMarkerRTC
   // <rtc-template block="consumer_declare">
   
   // </rtc-template>
+
+  typedef struct {
+	  const char	*patt_name;		// パターンファイル名
+	  int			patt_id;		// パターンID
+	  int			mark_id;		// マーカーID
+	  int			visible;		// 検出フラグ
+	  double		width;			// パターンの幅 [mm]
+	  double		center[2];		// パターンの中心座標
+	  double		trans[3][4];	// 座標変換行列
+  } OBJECT_T;
+  
+  OBJECT_T object[3];
+
+  int thresh; // 閾値(0～255)
 
  private:
   // <rtc-template block="private_attribute">

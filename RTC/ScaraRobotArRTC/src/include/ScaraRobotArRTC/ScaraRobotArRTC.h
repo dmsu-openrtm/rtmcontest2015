@@ -245,6 +245,30 @@ class ScaraRobotArRTC
    * - DefaultValue: 0.0
    */
   double m_BaseOffsetY;
+  /*!
+   * 
+   * - Name:  BaseOffsetZ
+   * - DefaultValue: 0.0
+   */
+  double m_BaseOffsetZ;
+  /*!
+   * 
+   * - Name:  RobotName
+   * - DefaultValue: ROBOT_NAME
+   */
+  std::string m_RobotName;
+  /*!
+   * 
+   * - Name:  CoordMaxX
+   * - DefaultValue: 0.04
+   */
+  double m_CoordMaxX;
+  /*!
+   * 
+   * - Name:  CoordMaxY
+   * - DefaultValue: 0.07
+   */
+  double m_CoordMaxY;
   // </rtc-template>
 
   // DataInPort declaration
@@ -259,6 +283,10 @@ class ScaraRobotArRTC
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
+  TimedBooleanSeq m_digitalOutput;
+  /*!
+   */
+  OutPort<TimedBooleanSeq> m_digitalOutputOut;
   
   // </rtc-template>
 
@@ -282,10 +310,10 @@ class ScaraRobotArRTC
   // <rtc-template block="consumer_declare">
   /*!
    */
-  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Common> m_ManipulatorCommonInterface_Common;
+  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Common> m_JARA_ARM_ManipulatorCommonInterface_Common;
   /*!
    */
-  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_ManipulatorCommonInterface_Middle;
+  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_JARA_ARM_ManipulatorCommonInterface_Middle;
   
   // </rtc-template>
 
@@ -307,7 +335,7 @@ class ScaraRobotArRTC
 	 
 	 char m_command[100];
 	 double calib_mat[5][3];
-	 double m_Buf[5];
+	 double m_Buf[10];
 	 double plane_coef[4];
 	 double tmat[4][4];
 

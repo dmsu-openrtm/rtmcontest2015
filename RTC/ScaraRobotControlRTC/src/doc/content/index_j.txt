@@ -98,10 +98,12 @@ ScaraRobotControlRTCは ``ScaraRobotControlRTCComp`` を実行（ ``${prefix}/co
 ================ ================== ================ ====
 パラメータ       データ型           デフォルト値     意味
 ================ ================== ================ ====
-Speed            double             30               
+FilePass         string             Sample.csv       
+Speed            int                30               
 BaseOffsetX      double             0.0              
 BaseOffsetY      double             0.0              
-FilePass         string             Sample.csv       
+BaseOffsetZ      double             0.0              
+RobotName        string             ROBOT_NAME       
 ================ ================== ================ ====
 
 ポート
@@ -112,8 +114,9 @@ FilePass         string             Sample.csv
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-ManipulatorCommonInterface_Common ServicePort JARA_ARM::ManipulatorCommonInterface_Common 
-ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
+digitalOutput   OutPort     RTC::TimedBooleanSeq           
+JARA_ARM_ManipulatorCommonInterface_Common ServicePort JARA_ARM::ManipulatorCommonInterface_Common 
+JARA_ARM_ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
 =============== =========== ============================== ====
 
 例

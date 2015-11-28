@@ -109,8 +109,8 @@ servoNum         int                5
 =============== =========== ============================== ====
 ポート名        ポート型    データ型                       意味
 =============== =========== ============================== ====
-ManipulatorCommonInterface_Common ServicePort JARA_ARM::ManipulatorCommonInterface_Common 
-ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
+JARA_ARM_ManipulatorCommonInterface_Common ServicePort JARA_ARM::ManipulatorCommonInterface_Common 
+JARA_ARM_ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
 =============== =========== ============================== ====
 
 例

@@ -8,12 +8,13 @@
 
 #   rtc-template -bcxx --module-name=ScaraRobotControlRTC 
 #   --module-desc='ModuleDescription' --module-version=1.0.0 --module-vendor=Saitama Univ. Design Lab. 
-#   --module-category=Category --module-comp-type=STATIC 
+#   --module-category=Industrial Robo --module-comp-type=STATIC 
 #   --module-act-type=PERIODIC --module-max-inst=1 
-#   --config=Speed:double:30 --config=BaseOffsetX:double:0.0 --config=BaseOffsetY:double:0.0 --config=FilePass:string:Sample.csv 
-#   --consumer-idl=C:\Users\Nogiwa\workspace\idl\ManipulatorCommonInterface_Common.idl --consumer-idl=C:\Users\Nogiwa\workspace\idl\ManipulatorCommonInterface_MiddleLevel.idl 
-#   --consumer=ManipulatorCommonInterface_Common:ManipulatorCommonInterface_Common:JARA_ARM::ManipulatorCommonInterface_Common 
-#   --consumer=ManipulatorCommonInterface_Middle:ManipulatorCommonInterface_Middle:JARA_ARM::ManipulatorCommonInterface_Middle 
+#   --config=FilePass:string:Sample.csv --config=Speed:int:30 --config=BaseOffsetX:double:0.0 --config=BaseOffsetY:double:0.0 --config=BaseOffsetZ:double:0.0 --config=RobotName:string:ROBOT_NAME 
+#   --outport=digitalOutput:RTC::TimedBooleanSeq 
+#   --consumer-idl=C:\Users\fujima\Desktop\IDL\ManipulatorCommonInterface_Common.idl --consumer-idl=C:\Users\fujima\Desktop\IDL\ManipulatorCommonInterface_MiddleLevel.idl 
+#   --consumer=ManipulatorCommonInterface_Common:JARA_ARM_ManipulatorCommonInterface_Common:JARA_ARM::ManipulatorCommonInterface_Common 
+#   --consumer=ManipulatorCommonInterface_Middle:JARA_ARM_ManipulatorCommonInterface_Middle:JARA_ARM::ManipulatorCommonInterface_Middle 
 
 
 ======================================================================
@@ -24,7 +25,7 @@ Module Name: ScaraRobotControlRTC
 Description: ModuleDescription
 Version:     1.0.0
 Vendor:      Saitama Univ. Design Lab.
-Category:    Category
+Category:    Industrial Robo
 Kind:        DataFlowComponent
 Comp. Type:  STATIC
 Act. Type:   PERIODIC
@@ -76,6 +77,24 @@ Lang Type:
 ======================================================================
 # <rtc-template block="outport">
 
+	Name:        digitalOutput
+	PortNumber:  0
+	Description: 
+	PortType: 
+	DataType:    RTC::TimedBooleanSeq
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
 
 # </rtc-template>
 
@@ -88,7 +107,7 @@ Lang Type:
 	Description: 
 	Interface:   
 		[Service Consumer Interfaces]
-		Name:          ManipulatorCommonInterface_Common
+		Name:          JARA_ARM_ManipulatorCommonInterface_Common
 		Type:          JARA_ARM::ManipulatorCommonInterface_Common
 		Description:   
 		Argument:      
@@ -100,7 +119,7 @@ Lang Type:
 	Description: 
 	Interface:   
 		[Service Consumer Interfaces]
-		Name:          ManipulatorCommonInterface_Middle
+		Name:          JARA_ARM_ManipulatorCommonInterface_Middle
 		Type:          JARA_ARM::ManipulatorCommonInterface_Middle
 		Description:   
 		Argument:      
@@ -115,9 +134,17 @@ Lang Type:
 ======================================================================
 # <rtc-template block="configuration">
 	Configuration:
+		Name:             FilePass
+		Description:     
+		Type:            string
+		DefaultValue:     Sample.csv
+		Unit:            
+		Range:           
+		Constraint:      
+
 		Name:             Speed
 		Description:     
-		Type:            double
+		Type:            int
 		DefaultValue:     30
 		Unit:            
 		Range:           
@@ -139,10 +166,18 @@ Lang Type:
 		Range:           
 		Constraint:      
 
-		Name:             FilePass
+		Name:             BaseOffsetZ
+		Description:     
+		Type:            double
+		DefaultValue:     0.0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:             RobotName
 		Description:     
 		Type:            string
-		DefaultValue:     Sample.csv
+		DefaultValue:     ROBOT_NAME
 		Unit:            
 		Range:           
 		Constraint:      
