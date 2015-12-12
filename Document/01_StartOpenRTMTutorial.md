@@ -10,15 +10,8 @@
 
 以下に，OpenRTM Tutorialの動作環境を示します．ご確認ください．
 
-|   |   |   |   |   |
-|---|---|---|---|---|
-|   |   |   |   |   |
-|   |   |   |   |   |
-|   |   |   |   |   |
-
-|項目|対応|
-| OS | Windows 7 / 8.1 |
-| ブラウザ | Internet Explorer (IE) |
+- OS : Windows 7 / 8.1
+- ブラウザ : Internet Explorer (IE)
 
 ## <a name="section2"> 2. USBメモリにOpenRTM Tutorial を実装する
 
