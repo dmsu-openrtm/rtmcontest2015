@@ -18,13 +18,13 @@
 
 本動画は，OpenRTM Tutorialに実装したロボット教育ツールによるアカデミックスカラロボットの動­作例を示したものです．
 
-[![](http://img.youtube.com/vi/yTuzV-D8ZGA/0.jpg)](https://www.youtube.com/watch?v=yTuzV-D8ZGA)
+[![](http://img.youtube.com/vi/iYPZ-b0ChOU/0.jpg)](https://www.youtube.com/watch?v=iYPZ-b0ChOU)
 
 ## <a name="section3"> 3. アカデミックスカラロボットによるパレタイジングデモ
 
 本動画は，アカデミックスカラロボットによるパレタイジングデモの様子を示します．
 
-[![](http://img.youtube.com/vi/EU5-3aDYP5Q/0.jpg)](https://www.youtube.com/watch?v=EU5-3aDYP5Q)
+[![](http://img.youtube.com/vi/qGa7_NnNpfY/0.jpg)](https://www.youtube.com/watch?v=qGa7_NnNpfY)
 
 ## <a name="section4"> 4. MELFA RV-3SDによるパレタイジングデモ
 
