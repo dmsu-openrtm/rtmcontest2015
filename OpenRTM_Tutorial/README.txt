@@ -1,17 +1,15 @@
 本ディレクトリには，OpenRTM Tutorialに関連するファイルが配置されています．
 
-OpenRTM Tutorialの使い方は，"OpenRTM_Tutorialを始めよう.pdf"を参照してください．
+OpenRTM Tutorialの使い方は，本ディレクトリではなく，"..\Document\StartOpenRTMTutorial.md(or html)"を参照してください．
 
 ----------
 OpenRTM_Tutorial
-  ├source
+  ├src
   │  ├demo
-  │  ├doc
-  │  └misc
-  ├README.txt
-  └Start_OpenRTM_Tutorial.pdf
+  │  └doc
+  └README.txt
 
-sourceディレクトリには，OpenRTM TutorialにScara Robotを追加するために作製したファイルが含まれています．なお，チュートリアルは日本語版，英語版の両方を作成しています．
-"source\demo"には，デモで使用するバッチファイルが配置されています．"source\doc"には，デモチュートリアルのソースファイルが配置されています．"source\misc"には，デモで使用するRTコンポーネント，ライブラリ等が配置されています．
+srcディレクトリには，OpenRTM TutorialにScara Robotを追加するために作製したファイルが含まれています．なお，チュートリアルは日本語版，英語版（ScaraRobotControlDemoのみ）を作成しています．
+"src\demo"には，チュートリアルで使用するバッチファイル，RTコンポーネント，ライブラリ等が配置されています．"src\doc"には，チュートリアルのソースファイルが配置されています．
 
-最終更新日：2015/11/6
+最終更新日：2015/12/13

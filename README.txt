@@ -14,10 +14,16 @@
                         "armarker_for_palletizing.pdf"を点対称・線対称にならないように変更，同時にpatternファイル (patt_r, patt_t, patt_m) を再生成
                         解説マニュアル等のマニュアルを更新
                         動画を視聴時間短縮のため早送り
-1.2.0       2015/11/28  OpenRTM Tutorialとの互換性を保つためOpenRTM-aist C++ 1.1.0-RELEASE へダウングレード，
+1.2.0       2015/11/28  OpenRTM Tutorialとの互換性を保つためOpenRTM-aist C++ 1.1.0-RELEASE へダウングレード
                         ARマーカに用いたパレタイジングデモに関して，三菱電機株式会社MELFA-RV-3SDを追加(マニュアル，動画，RTC)
                         DetectArMarkerRTCにおいて，2値化の閾値をアクティブに変更可能に
                         "Start_OpenRTM_Tutorial.pdf"の更新
+1.3.0       2015/12/13  VS_ASR_RTC，ScaraRobotControlRTC，ScaraRobotArRTCのサービスポートインタフェース名の変更
+                        ロボット教育ツールの使い方に関するドキュメントを大幅更新，解説動画の追加
+                        ARマーカに用いたパレタイジングデモのうち，スカラロボット部分をOpenRTM Tutorialへ実装
+                        動画をYouTubeへ移動
+                        国際ロボット展(iREX2015)関連資料の追加
+
 ----------
 本パッケージは、RTミドルウエアコンテスト2015の応募作品である「USBメモリに搭載したポータブルRTM環境を用いたロボット教育ツール」をパッケージ化したものです．
 はじめに，"OpenRTM_Tutorial\Start_OpenRTM_Tutorial.pdf"をお読みください．
@@ -26,40 +32,44 @@
 ----------
 ScaraRobotRTC1_0
   ├Document
-  │  ├01_Control_AcademicScaraRobot_by_RTC.pdf
-  │  ├02_Control_MELFA_RV-3SD_by_RTC.pdf
-  │  ├11_VS_ASR_RTC_manual.pdf
-  │  ├12_ScaraRobotControlRTC_manual.pdf
-  │  ├13_DetectArMarkerRTC_manual.pdf
-  │  ├14_ScaraRobotArRTC_manual.pdf
-  │  ├21_RTC_DevelopmentEnviroment_manual.pdf
+  │  ├image
+  │  ├01_StartOpenRTMTutorial.html
+  │  ├01_StartOpenRTMTutorial.md
+  │  ├02_Change_DriveName.html
+  │  ├02_Change_DriveName.md
+  │  ├11_Control_AcademicScaraRobot_by_RTC.pdf
+  │  ├12_Control_MELFA_RV-3SD_by_RTC.pdf
+  │  ├21_VS_ASR_RTC_manual.pdf
+  │  ├22_ScaraRobotControlRTC_manual.pdf
+  │  ├23_DetectArMarkerRTC_manual.pdf
+  │  ├24_ScaraRobotArRTC_manual.pdf
+  │  ├31_RTC_DevelopmentEnviroment_manual.pdf
   │  ├LICENSE.txt
+  │  └README.txt
+  ├iREX2015
+  │  ├iREX2015_display.pdf
+  │  ├iREX2015_handout.pdf
   │  └README.txt
   ├Movie
-  │  ├01_ScaraRobotDemo.mp4
-  │  ├02_PalletizingDemo_by_VS_ASR.mp4
-  │  ├03_PalletizingDemo_by_MELFA_RV-3SD.mp4
-  │  ├LICENSE.txt
+  │  ├
   │  └README.txt
   ├OpenRTM_Tutorial
-  │  ├source
+  │  ├src
   │  │  ├demo
-  │  │  ├doc
-  │  │  └misc
+  │  │  └doc
   │  ├LICENSE.txt
-  │  ├Start_OpenRTM_Tutorial.pdf
   │  └README.txt
   ├RTC
   │  ├DetectArMarkerRTC
   │  │  ├bin
   │  │  │  ├Data
-  │  │  │  ｜  ├armarker_for_palletizing.pdf
-  │  │  │  ｜  ├camera_para.dat
-  │  │  │  ｜  ├patt_m
-  │  │  │  ｜  ├patt_r
-  │  │  │  ｜  ├patt_t
-  │  │  │  ｜  ├robot_calibration_grid.pdf
-  │  │  │  ｜  └WDM_camera_flipV.xml
+  │  │  │  │  ├camera_para.dat
+  │  │  │  │  ├palletizing_pattern.pdf
+  │  │  │  │  ├patt_m
+  │  │  │  │  ├patt_r
+  │  │  │  │  ├patt_t
+  │  │  │  │  ├robot_calibration_grid.pdf
+  │  │  │  │  └WDM_camera_flipV.xml
   │  │  │  ├detectarmarkerrtc.dll
   │  │  │  ├detectarmarkerrtc.exp
   │  │  │  ├detectarmarkerrtc.lib
@@ -67,6 +77,7 @@ ScaraRobotRTC1_0
   │  │  │  ├DSVL.dll
   │  │  │  ├freeglut.dll
   │  │  │  ├libARvideo.dll
+  │  │  │  ├msvcp71.dll
   │  │  │  └rtc.conf
   │  │  ├src
   │  │  └COPYING.txt

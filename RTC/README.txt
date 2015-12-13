@@ -6,8 +6,8 @@ RTC
   Ñ•DetectArMarkerRTC
   Ñ†  Ñ•bin
   Ñ†  Ñ†  Ñ•Data
-  Ñ†  Ñ†  Åb  Ñ•armarker_for_palletizing.pdf
   Ñ†  Ñ†  Åb  Ñ•camera_para.dat
+  Ñ†  Ñ†  Åb  Ñ•palletizing_pattern.pdf
   Ñ†  Ñ†  Åb  Ñ•patt_m
   Ñ†  Ñ†  Åb  Ñ•patt_r
   Ñ†  Ñ†  Åb  Ñ•patt_t

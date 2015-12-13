@@ -1,11 +1,10 @@
-本ディレクトリには，デモ動画が配置されています．
+デモ動画はyoutubeに移動しました．
+"About_movie.md(or html)"に，アップロードされている動画をまとめてあります．
 
 ----------
 Movie
-  ├01_ScaraRobotDemo.mp4
-  ├02_PalletizingDemo_by_VS_ASR.mp4
-  ├03_PalletizingDemo_by_MELFA_RV-3SD.mp4
-  ├LICENSE.txt
+  ├About_movie.html
+  ├About_movie.md
   └README.txt
 
-最終更新日：2015/11/6
+最終更新日：2015/12/13

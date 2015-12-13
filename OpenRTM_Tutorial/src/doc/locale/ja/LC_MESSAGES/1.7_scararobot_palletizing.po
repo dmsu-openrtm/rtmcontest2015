@@ -1,0 +1,1090 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openrtm_tutorial 0.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-13 11:03+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ..\..\1.7_scararobot_palletizing.rst:1
+msgid "**(デモ 7) アカデミックスカラロボットによるパレタイジングデモ **"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:11
+msgid "Introduction"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:14
+msgid "このページで体験すること"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:28
+msgid "準備するもの"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:31
+msgid "ハードウエア"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:52
+msgid "PC"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:59
+msgid "パレタイジングキューブ"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:76
+msgid "キャリブレーション用座標平面"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:93
+msgid "ソフトウエア"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:94
+msgid "本チュートリアルで準備されているので，基本的には必要なソフトウエアはありません．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:134
+msgid "以下，特に指定ない限り，配布 USB のホームディレクトリに居ることを前提とします．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:137
+msgid "nameserver 起動 (全チュートリアル共通)"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:138
+msgid "基本的に `OpenRTM` の `nameserver` は一度起動すると，起動したままでもすべてのチュートリアルは動作すると思われます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:140
+msgid "次のリンクをクリックして `nameserver` を起動．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:148
+msgid ""
+"（上記方法でうまく行かなかった場合のみ以降実施） `Explorer` で `demo` フォルダを開き，`rtm-naming.bat` "
+"をダブルクリックして実行．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:150
+msgid "`cmd.exe` (Command prompt) が開きっぱなしになり，次のような文言が表示されれば成功．::"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:156
+msgid "上記手順で `cmd.exe` が消えてしまう場合は，`nameserver` がうまく起動していないので次の手順で原因を発見："
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:158
+msgid "3.1) `Explorer` 上で，USB のドライブ名を確認 (D/E/F etc. ここでは `F` と仮定)"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:160
+msgid "3.2) `cmd.exe` を手動起動 (Win 7: [2_], Win 8: [3_])"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:162
+msgid "3.3) 以下コマンドでフォルダ移動・コマンド実行::"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:168
+msgid ""
+"エラー等発生していればここで表示されるのでその内容を診断．`OpenRTM` の `nameserver` の問題は WEB "
+"で検索して対処してみてください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:171
+msgid "チュートリアルのプログラム実行"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:336
+msgid ""
+"Go back to `index <top.html>`__ | Go to `next <2.1_samplewordlogger.html>`__"
+" |"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:338
+msgid "Choose `Other language <index.html>`__"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:77
+msgid "ロボット座標系とカメラ座標系のキャリブレーションに用います．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:68
+msgid "枠線に沿って，R，T，Mのマーカをそれぞれ1つずつはさみ等で切り離します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:85
+msgid "枠線に沿って，はさみ等で切り離します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:60
+msgid "アカデミックスカラロボットに同梱されているスポンジキューブを用いて，パレタイジングキューブを作製します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:55
+msgid "OS: Microsoft Windows 7 / 8"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:97
+msgid "カメラのレンズキャリブレーション"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:99
+msgid "カメラのレンズキャリブレーションを行い，カメラパラメータファイルを生成します．カメラレンズ固有の歪みを矯正するために必要です．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:133
+msgid "チュートリアル実施手順"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:123
+msgid "印刷したキャリブレーションパターンは平らな板に張り付けて使用してください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:182
+msgid ""
+"次のリンクをクリックして `./demo/RTSE.bat` を実行します．起動できない場合は，手動で `Explorer` から実行します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:188
+msgid "RT System Editor が下図のように起動します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:201
+msgid ""
+"左側のペインで 127.0.0.1 を選択し，直上の右矢印をクリックすると，起動中の RT Component が同ペイン上に表示されます．ここでは "
+"`DetectArMarkerRTC` ， `ScaraRobotArRTC` ， `VS_ASR_RTC` の3つとなるはずです．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:220
+msgid ""
+"データポートを接続します．下図に示すように，一方の RTC "
+"の\"□\"上でドラッグし，もう一方のRTCの\"□\"上でドロップします．(\"□\"は，一方が四角形に三角形を足した形，もう一方が四角形から三角形をくり抜いた形です)．"
+" \"Connector Profile\" のウィンドウが表示されますので，変更せずに \"OK\" "
+"を選択します．接続されたデータポートは黄緑色に変化します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:225
+msgid "同ペイン上で直上左にある \"ALL\" というアイコンをクリックし，すべての RTC を Activate します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:235
+msgid ""
+"ビデオが正常に初期化されると，下図に示すようなキャプチャウィンドウが表示されます(ウィンドウが表示されるまで多少の時間を要する場合があります)．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:240
+msgid "`ScaraRobotArRTC` が正常に \"Activate\" されると，下図に示すような状態になります．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:245
+msgid "`VS_ASR_RTC` が正常に \"Activate\" されると，下図に示すような状態になります．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:250
+msgid "すべてのRTCを参照しますので，下図を参考に見やすい形に並べてください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:318
+msgid ""
+"キャリブレーションによる設定値を確認します． `ScaraRobotControlRTC` "
+"に以下のように表示されていることを確認し，任意の位置に，マーカ \"R\" ， \"T\" ， \"M\" を貼り付けたキューブを配置します．::"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:203
+msgid "同ペイン上で直上左にある \"ON\" というアイコンをクリックすると， `System Diagram` が真ん中のペインに開かれます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:56
+msgid "ブラウザ: Microsoft Internet Explorer(IE) 8 / 10 (IEは標準でインストールされています)"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:208
+msgid "左側のペインから各 RTC を System Diagram にドラッグ＆ドロップします．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:215
+msgid ""
+"サービスポートを接続します．下図に示すように，一方の RTC の\"□\"上でドラッグし，もう一方の RTC の\"□\"上でドロップします． "
+"\"Port Profile\" のウィンドウが表示されますので，変更せずに \"OK\" "
+"を選択します．接続されたサービスポートは\"水色\"に変化します．なお，サービスポートの接続を間違えた場合は， \"Port Profile\" "
+"のウィンドウにおいて，\"一致するポートインターフェースがありません。\"と警告されます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:15
+msgid ""
+"ヴイストン株式会社製アカデミックスカラロボットと Web カメラを組み合わせてパレタイジングを行います．パレタイジングの画像処理には，一例として AR "
+"マーカを用います．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:18
+msgid "ActiveX について（必ずお読みください）"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:19
+msgid ""
+"本チュートリアルは ActiveX "
+"を使用しています．よって，次のような警告が出た際は「ブロックされているコンテンツを許可」もしくは「はい」を選択します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:34
+msgid "アカデミックスカラロボット（ VS-ASR ）"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:35
+msgid ""
+"ヴイストン株式会社より販売されている，ロボットの制御技術を学習するためのロボットプログラミング教材です．以下のリンクより製品情報を参照することができます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:53
+msgid "以下に示す OS およびブラウザが必要です．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:62
+msgid ""
+"\"armarker_for_palletizing.pdf\" を A4 用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（"
+" Adobe Reader の場合，「サイズオプション」の「実際のサイズ」を選択します）．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:70
+msgid "下図に示すように，両面テープでスポンジキューブに貼り付けます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:79
+msgid ""
+"\"robot_calibration_grid.pdf\" を A4 用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（ "
+"Adobe Reader の場合，「サイズオプション」の「実際のサイズ」を選択します）．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:87
+msgid "下図にしたがって，テープ等でロボットの土台に貼り付けます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:101
+msgid ""
+"\"calib_dist.pdf\" を A4 用紙に， \"calib_cpara.pdf\" を A3 "
+"用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意してください（ Adobe Reader "
+"の場合，「サイズオプション」の「実際のサイズ」を選択します）．次のリンクをクリックしてキャリブレーションに必要な pdf を開くことができます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:124
+msgid ""
+"「Image size」は大きめの方が操作しやすいです（本チュートリアル作成時は，640x480を選択しています）．選択した「Image size」は，"
+" \"DetectArMarkerRTC\" を実行する際に同値を用います．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:125
+msgid ""
+"\"calib_dist.exe\"によるキャリブレーションにおいて，ドラッグして点を囲む際，上記リンク先の「 Figure 2 "
+"」にあるように，点のみが白，周りがすべて黒と鮮明に表示されることを確認してください．前述のようにならず，周りにも白が混ざる場合は，正しい値を取得できていません．照明条件や角度等を工夫して24点すべてで正しく取得できるようにしてください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:126
+msgid ""
+"\"calib_dist.exe\"によるキャリブレーション終了時に表示されるパラメータ（ Center X，Center Y，Dist Factor）"
+" は外部出力されませんので，書き留めてください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:128
+msgid ""
+"カメラパラメータファイルの名前を \"camera_para.dat\" "
+"に変更し，以下に示すディレクトリへコピーします．上書き確認されますので，\"移動して置換\"を選択します．::"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:45
+msgid "Web カメラ"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:46
+msgid ""
+"USB で PC に接続できるタイプのカメラが必要です． Web "
+"カメラの販売元から明るさやホワイトバランスを調整できるソフトウエアが同梱されているものが望ましいです．ここでは例として， Logicool 社製の "
+"C600 を示します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:176
+msgid ""
+"次のリンクをクリックして `./demo/ScaraRobotPalletizingDemo/StartRTC.bat` "
+"を実行します．起動できない場合は，手動で `Explorer` から実行します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:193
+msgid ""
+"次のリンクをクリックして `./demo/ScaraRobotPalletizingDemo/ConnectAndActivateRTC.bat` "
+"を実行します．起動できない場合は，手動で `Explorer` から実行します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:121
+msgid "レンズキャリブレーションを実施する際の注意点を以下に挙げます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:230
+msgid ""
+"`DetectArMarkerRTC` "
+"が正常に起動すると，次のようなビデオプロパティを設定するウィンドウが表示されます．このうち，\"出力サイズ\"の設定値を1.4節のカメラのレンズキャリブレーションで用いたものを同値に設定してください．設定後は"
+" \"OK\" を選択します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:108
+msgid "レンズキャリブレーションの手順は以下のURLより参照できます． \"Two Step Calibration\" を選択してください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:114
+msgid ""
+"ARToolKitのうち，レンズキャリブレーションに必要なプログラムを本チュートリアルに同梱しています．次のリンクをクリックして，該当するプログラムを開くことができます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:174
+msgid "すべてのRTCをActivateするまで"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:199
+msgid ""
+"手順5～11では，手順3でバッチファイルが自動実行する内容を手動で行う場合の手順について解説します．手順3に成功している場合は，手順12に進んでください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:210
+msgid ""
+"コンフィギュレーションを設定します．System Diagram 上で，`ScaraRobotArRTC`をクリックし，選択します． System "
+"Diagram の直下にある Configuration View にある，「RobotName」の Value "
+"を「ROBOT_NAME」から「SCARA」に変更し，「適用」をクリックします．同様に「Speed」のValueを「30」から「40」に変更し，「適用」をクリックします．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:258
+msgid ""
+"ベースオフセットを設定します．`ScaraRobotControlRTC`のコンソールウィンドウにおいて，キーボードを「b」，「Enter」キーの順に押します．以下のように表示されたことを確認した後，ロボットのハンドを手動で座標系の原点位置に移動させます．素早く動かすとロボット故障の原因となりますので注意してください．::"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:266
+msgid "ハンドを位置決めしたら，キーボードを「s」，「Enter」キーの順に押します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:268
+msgid ""
+"キャリブレーションを行います．`ScaraRobotControlRTC`のコンソールウィンドウにおいて，キーボードを「c」，「Enter」キーの順に押します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:270
+msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (0, 0) に置きます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:275
+msgid ""
+"キャプチャウィンドウでマーカを含めたキューブが下図に示すように青線の立方体で囲まれていることを確認してください．これがARマーカを認識できていることを示します．認識されない場合は，以下に示す3つの項目で調整してください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:277
+msgid "Webカメラの角度，照明条件を変更する．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:286
+msgid "Webカメラに同梱されているアプリケーションでキャプチャの明るさを変更する（明度を上げることで改善される場合が多いです）．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:291
+msgid ""
+"同様に`DetectArMarkerRTC`のコンソールウィンドウの出力を参照し，出力値が安定していることを確認してください．安定しない場合は，手順21で述べた手段を用いて対処してください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:296
+msgid "キーボードの「Enter」キーを押して，マーカ座標を取得します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:298
+msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (-40, -70) に置き，手順21～23を繰り返します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:303
+msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (40, -70) に置き，手順21～23を繰り返します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:308
+msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (40, 70) に置き，手順21～23を繰り返します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:313
+msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (-40, 70) に置き，手順21～23を繰り返します．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:326
+msgid ""
+"キーボードの \"Enter\" "
+"キーを押すと，値の取得が行われますので配置した位置と大きな相違がないことを確認します(±5mm程度目安です)．大きく異なる場合は，手順19からやり直してください．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:331
+msgid ""
+"「ScaraRobotControlRTC」のコンソールウィンドウにおいて，キーボードを「d」，「Enter」キーの順に押すと，デモが開始されます．ARマーカを用いたパレタイジングデモの流れを下図に示します．ARマーカから位置を認識しているのは移動前のみとなります．移動後の位置はあらかじめプログラム内に格納された値です．なお，デモを終了する場合は，「ScaraRobotControlRTC」のコンソールウィンドウにおいて，キーボードの「Esc」キーを押してください．下図フローのうち，2番目もしくは4番目が終了した時点で中断されます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:256
+msgid "すべてのRTCをActivateした後"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:279
+msgid ""
+"b. カメラキャプチャ画像の2値化の閾値を変更する． "
+"`DetectArMarkerRTC`は2値化の閾値（0～255）を変更するためのコマンドを実装しています．`DetectArMarkerRTC`のキャプチャウィンドウを選択し，キーボードで以下に示すキーを選択することでそれぞれ実行できます．"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:282
+msgid "p：2値化の閾値を+1"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:283
+msgid "m：2値化の閾値を-1"
+msgstr ""
+
+#: ..\..\1.7_scararobot_palletizing.rst:284
+msgid "n：現在の2値化の閾値を`DetectArMarkerRTC`のコンソールウィンドウに表示"
+msgstr ""
+
+#~ msgid "説明"
+#~ msgstr ""
+
+#~ msgid "名前"
+#~ msgstr ""
+
+#~ msgid "デフォルト値"
+#~ msgstr ""
+
+#~ msgid "BaseOffsetX"
+#~ msgstr ""
+
+#~ msgid "0.0"
+#~ msgstr ""
+
+#~ msgid "ベースオフセットのX軸方向の値を[m]で指定．"
+#~ msgstr ""
+
+#~ msgid "BaseOffsetY"
+#~ msgstr ""
+
+#~ msgid "ベースオフセットのY軸方向の値を[m]で指定．"
+#~ msgstr ""
+
+#~ msgid "Speed"
+#~ msgstr ""
+
+#~ msgid "30"
+#~ msgstr ""
+
+#~ msgid "ロボットの動作速度を1[%]～100[%]の整数値で指定．"
+#~ msgstr ""
+
+#~ msgid "コンフィギュレーション"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "基本的にはコンフィギュレーションを変更する必要はありません． \"BaseOffsetX\" および \"BaseOffsetY\" "
+#~ "は，2章2節1項の手順16で取得しています． Speed は 30~40[%]の間で動作確認をしています．"
+#~ msgstr ""
+
+#~ msgid "すべてのRTCを起動した後"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "b. カメラキャプチャ画像の2値化の閾値を変更する． "
+#~ "`DetectArMarkerRTC`は2値化の閾値（0～255）を変更するためのコマンドを実装しています．`DetectArMarkerRTC`のキャプチャウィンドウを選択し，キーボードで以下に示すキーを選択することでそれぞれ実行できます．"
+#~ " p：2値化の閾値を+1 m：2値化の閾値を-1 n：現在の2値化の閾値を`DetectArMarkerRTC`のコンソールウィンドウに表示"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ベースオフセットを設定します． `ScaraRobotControlRTC` "
+#~ "に以下のように表示されていることを確認し，原点位置に手動でスカラロボットのハンドを持っていきます．素早く動かすとロボット故障の原因となりますので注意してください．::"
+#~ msgstr ""
+
+#~ msgid "ハンドを位置決めしたら，キーボードの \"Enter\" キーを押します．"
+#~ msgstr ""
+
+#~ msgid "キャリブレーションを行います．下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (0, 0) に置きます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "`DetectArMarkerRTC` "
+#~ "の出力を参照し，出力値が安定していることを確認してください．安定しない場合は，Webカメラの角度，照明条件の変更，およびWebカメラに同梱されているアプリケーションでキャプチャ画像の明るさを変更するなどして対処してください．"
+#~ msgstr ""
+
+#~ msgid "キーボードの \"Enter\" キーを押して，マーカ座標を取得します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "キーボードの \"Enter\" "
+#~ "キーを押すと，値の取得が行われますので配置した位置と大きな相違がないことを確認します(±5mm程度目安です)．大きく異なる場合は，手順3からやり直します．"
+#~ msgstr ""
+
+#~ msgid "すべてのRTCを起動するまで"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "手順5～10では，手順3でバッチファイルが自動実行する内容を手動で行う場合の手順について解説します．手順3に成功している場合は，手順11に進んでください．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (-40, -70) に置き，手順19～21を繰り返します．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (40, -70) に置き，手順19～21を繰り返します．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (40, 70) に置き，手順19～21を繰り返します．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (-40, 70) に置き，手順19～21を繰り返します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "キャプチャウィンドウでマーカを含めたキューブが青線の立方体で囲まれていることを確認してください．これがARマーカを認識できていることを示します．認識されない場合は，Webカメラの角度，照明条件の変更，およびWebカメラに同梱されているアプリケーションでキャプチャの明るさを変更するなどして対処してください．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "レンズキャリブレーションの手順は以下のURLより参照できます． \"Two Step Calibration\" "
+#~ "を選択してください．なお，レンズキャリブレーションの実施には ARToolKit のダウンロードおよびインストールが必要です．また，別途 "
+#~ "\"MSVCP71.dll\" が必要になります．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "キーボードの「Enter」キーを押すと，デモが開始されます．ARマーカを用いたパレタイジングデモの流れを下図に示します．ARマーカから位置を認識しているのは移動前のみとなります．移動後の位置はあらかじめプログラム内に格納された値です．"
+#~ msgstr ""
+
+#~ msgid "次のリンクをクリックして，レンズキャリブレーションに必要なプログラムを開くことができます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "キーボードの「Enter」キーを押すと，デモが開始されます．ARマーカを用いたパレタイジングデモの流れを下図に示します．ARマーカから位置を認識しているのは移動前のみとなります．移動後の位置はあらかじめプログラム内に格納された値の位置に移動します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "`DetectArMarkerRTC` "
+#~ "が正常に起動すると，次のようなビデオプロパティを設定するウィンドウが表示されます．このうち，\"出力サイズ\"の設定値を1.3節のカメラのレンズキャリブレーションで用いたものを同値に設定してください．設定後は"
+#~ " \"OK\" を選択します．"
+#~ msgstr ""
+
+#~ msgid "なお，レンズキャリブレーションを実施する際の注意点を以下に挙げます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "#~次のリンクをクリックして，レンズキャリブレーションに必要なプログラムを開くことができます． #~ #~.. raw:: html #~ #~"
+#~ "      <a class=\"reference external\"  href=\"javascript:void(0)\" "
+#~ "onclick=\"call_ScaraRobotPallet_Start_Dist(); return "
+#~ "false;\">./misc/VstoneScaraRobotRTC/Palletizing/Tools/calib_dist.exe</a><br><br>"
+#~ " #~      <a class=\"reference external\"  href=\"javascript:void(0)\" "
+#~ "onclick=\"call_ScaraRobotPallet_Start_Cparam(); return "
+#~ "false;\">./misc/VstoneScaraRobotRTC/Palletizing/Tools/calib_cparam.exe</a> "
+#~ "#~ なお，レンズキャリブレーションを実施する際の注意点を以下に挙げます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "次のリンクをクリックして "
+#~ "`./demo/ScaraRobotPalletizingDemo/2_2_1_StartScaraRobotPalletizing.bat` "
+#~ "を実行します．起動できない場合は，手動で `Explorer` から実行します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "次のリンクをクリックして "
+#~ "`./demo/ScaraRobotPalletizingDemo/2_2_3_ConnectAndActivateRTC.bat` "
+#~ "を実行します．起動できない場合は，手動で `Explorer` から実行します．"
+#~ msgstr ""
+
+#~ msgid "Webカメラ"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "キャプチャウィンドウでマーカを含めたキューブが下図に示すように青線の立方体で囲まれていることを確認してください．これがARマーカを認識できていることを示します．認識されない場合は，Webカメラの角度，照明条件の変更，およびWebカメラに同梱されているアプリケーションでキャプチャの明るさを変更するなどして対処してください．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "USB で PC に接続できるタイプのカメラが必要です．Web "
+#~ "カメラの販売元から明るさやホワイトバランスを調整できるソフトウエアが同梱されているものが望ましいです．ここでは例として， Logicool社製の "
+#~ "C600 を示します．"
+#~ msgstr ""
+
+#~ msgid "関節角リミットオーバーでエラー停止した状態からの復帰方法"
+#~ msgstr ""
+
+#~ msgid "12.1) 関節角リミットオーバーでエラーを出力して停止している状態である．"
+#~ msgstr ""
+
+#~ msgid "図7　復帰方法 1"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "12.2) "
+#~ "まず，ScaraRobotControlRTCの上にカーソルを持っていき，右クリックでプルダウンメニューを出し，その中のResetを選択する．"
+#~ msgstr ""
+
+#~ msgid "図8　復帰方法 2"
+#~ msgstr ""
+
+#~ msgid "12.3) Reset後は下図のような状態になる．"
+#~ msgstr ""
+
+#~ msgid "図9　復帰方法 3"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "12.4) RTC 以外の System Diagram 上で右クリックによりプルダウンメニューを出し，All Activate "
+#~ "を選択する．これで最初の状態に戻る．"
+#~ msgstr ""
+
+#~ msgid "図10　復帰方法 4"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "`DetectArMarkerRTC` が正常に \"Initialize\" "
+#~ "されると，次のようなビデオプロパティを設定するウィンドウが表示されます．このうち，\"出力サイズ\"の設定値を1.3節のカメラのレンズキャリブレーションで用いたものを同値に設定してください．設定後は"
+#~ " \"OK\" を選択します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "(First) Move the robot hand to the point of origin manually. (Second) Press "
+#~ "'Enter' key.\""
+#~ msgstr ""
+
+#~ msgid "(First) Put 'R', 'T' and 'M' marker. (Second) Press 'Enter' key."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "基本的にはコンフィギュレーションは変更する必要がありません． \"BaseOffsetX\" および \"BaseOffsetY\" "
+#~ "は，手順16で取得しています． Speed は 30~40[%]の間で動作確認をしています．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ヴイストン株式会社製 アカデミックスカラロボットとWebカメラを組み合わせてパレタイジングを行います． "
+#~ "パレタイジングの画像処理には，一例としてARマーカを用います．"
+#~ msgstr ""
+
+#~ msgid "アカデミックスカラロボット (VS-ASR)"
+#~ msgstr ""
+
+#~ msgid "両面テープでスポンジキューブに貼り付けます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"robot_calibration_grid.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（Adobe"
+#~ " Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します）．"
+#~ msgstr ""
+
+#~ msgid "下図に従って，テープ等で貼り付けます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ヴイストン株式会社より販売されている，ロボットの制御技術を学習するためのロボットプログラミング教材です．以下のURLより製品情報を参照することができます．"
+#~ msgstr ""
+
+#~ msgid "以下に示すOSおよびブラウザが必要です．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"palletizing_pattern.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します(Adobe "
+#~ "Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します)．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "カメラパラメータファイルの名前を\"camera_para.dat\"に変更し，以下に示すディレクトリへコピーします．上書き確認されますので，\"移動して置換\"を選択します．::"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"Image size\"は大きめの方が操作しやすいです(本チュートリアル作成時は，640x480を選択しています)．選択した \"Image "
+#~ "size\" は， \"DetectArMarkerRTC\" を実行する際に同値を用います．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"calib_dist.exe\"によるキャリブレーションにおいて，ドラッグして点を囲む際，上記リンク先の \"Figure 2\" "
+#~ "にあるように，点のみが白，周りがすべて黒と鮮明に表示されることを確認してください．前述のようにならず，周りにも白が混ざる場合は，正しい値を取得できていません．照明条件や角度等を工夫して24点すべてで正しく取得できるようにしてください．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"calib_dist.exe\"によるキャリブレーション終了時に表示されるパラメータ (Center X，Center Y，Dist Factor)"
+#~ " は外部出力されませんので，書き留めてください．"
+#~ msgstr ""
+
+#~ msgid "ActiveX について (必ずお読みください)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "本チュートリアルは ActiveX "
+#~ "を使用しています．よって，次のような警告が出た際は\"ブロックされているコンテンツを許可\"もしくは\"はい\"を選択します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"calib_dist.pdf\"をA4用紙に，\"calib_cpara.pdf\"をA3用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意してください（Adobe"
+#~ " Readerの場合，「サイズオプション」の「実際のサイズ」を選択）．次のリンクをクリックして pdf を開くことができます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "USBでPCに接続できるタイプのカメラが必要です．Webカメラの販売元から明るさやホワイトバランスを調整できるソフトウエアが同梱されているものが望ましいです．"
+#~ msgstr ""
+
+#~ msgid "<br>"
+#~ msgstr ""
+
+#~ msgid "ブラウザ: Internet Explorer(IE) 8 / 10 (IEは標準でインストールされています)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"calib_dist.pdf\"をA4用紙に，\"calib_cpara.pdf\"をA3用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意してください（Adobe"
+#~ " Readerの場合，「サイズオプション」の「実際のサイズ」を選択）．"
+#~ msgstr ""
+
+#~ msgid "リンクを入れる"
+#~ msgstr ""
+
+#~ msgid "レンズキャリブレーションの手順は以下のURLより参照できます．\"Two Step Calibration\"を選択してください．"
+#~ msgstr ""
+
+#~ msgid "レンズキャリブレーションに必要なプログラムは以下に配置してあります．"
+#~ msgstr ""
+
+#~ msgid "リンクを入れる．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "サービスポートを接続します．下図に示すように，一方の RTC の\"□\"上でドラッグし，もう一方の RTC の\"□\"上でドロップします． "
+#~ "\"Port Profile\" のウィンドウが表示されますので，変更せずに \"OK\" "
+#~ "を選択します．接続されたサービスポートは\"水色\"に変化します．なお，サービスポートの接続を間違えた場合は， \"Port Profile\" "
+#~ "のウィンドウにおいて，\"一致するポートインターフェース\"がありません。\"と警告されます．"
+#~ msgstr ""
+
+#~ msgid "Move the robot hand to the point of origin manually."
+#~ msgstr ""
+
+#~ msgid "Press 'Enter' key.\""
+#~ msgstr ""
+
+#~ msgid "Put 'R', 'T' and 'M' marker."
+#~ msgstr ""
+
+#~ msgid "Press 'Enter' key."
+#~ msgstr ""
+
+#~ msgid "左側のペインから各 RTC を System Diagram にドラッグ＆ドロップすると下図のように表示されます．"
+#~ msgstr ""
+
+#~ msgid "image追加"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "手順5～9では，手順3でバッチファイルが自動実行する内容を手動で行う場合の手順について解説します．手順3に成功している場合は，手順10に進んでください．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "File --> Open New System Editor を選ぶと， `System Diagram` "
+#~ "が真ん中のペインに開かれます．左側のペインから各 RTC を System Diagram にドラッグ＆ドロップすると下図のように表示されます．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (-40, -70) に置き，手順18～20を繰り返します．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (40, -70) に置き，手順18～20を繰り返します．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (40, 70) に置き，手順18～20を繰り返します．"
+#~ msgstr ""
+
+#~ msgid "下図に示すように，マーカ \"R\" を貼り付けたキューブを座標 (x, y) = (-40, 70) に置き，手順18～20を繰り返します．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "次のリンクをクリックして `./demo/ScaraRobotDemo/0_StartDemo.bat` を実行する．起動できない場合は，手動で "
+#~ "`Explorer` から実行する．"
+#~ msgstr ""
+
+#~ msgid "なお，スカラロボットの座標系は図1に示す通りである．"
+#~ msgstr ""
+
+#~ msgid "図1　スカラロボットの座標系"
+#~ msgstr ""
+
+#~ msgid "次のリンクをクリックして `./misc/VstoneScaraRobotRTC/Sample.csv` を編集する．"
+#~ msgstr ""
+
+#~ msgid "なお，スカラロボットで使用可能なコマンドは表1に示す通りである．"
+#~ msgstr ""
+
+#~ msgid "表1　スカラロボットで使用可能なコマンド"
+#~ msgstr ""
+
+#~ msgid "No."
+#~ msgstr ""
+
+#~ msgid "コマンド"
+#~ msgstr ""
+
+#~ msgid "書式"
+#~ msgstr ""
+
+#~ msgid "1"
+#~ msgstr ""
+
+#~ msgid "SERVO_OFF"
+#~ msgstr ""
+
+#~ msgid "全軸サーボをOFFにする．"
+#~ msgstr ""
+
+#~ msgid "2"
+#~ msgstr ""
+
+#~ msgid "SERVO_ON"
+#~ msgstr ""
+
+#~ msgid "全軸サーボをONにする．"
+#~ msgstr ""
+
+#~ msgid "3"
+#~ msgstr ""
+
+#~ msgid "HAND_CLOSE"
+#~ msgstr ""
+
+#~ msgid "ハンドを完全に閉じる．"
+#~ msgstr ""
+
+#~ msgid "4"
+#~ msgstr ""
+
+#~ msgid "HAND_OPEN"
+#~ msgstr ""
+
+#~ msgid "ハンドを完全に開く．"
+#~ msgstr ""
+
+#~ msgid "5"
+#~ msgstr ""
+
+#~ msgid "HAND_MOV"
+#~ msgstr ""
+
+#~ msgid "HAND_MOV，Rate（単位：Rate [%]）"
+#~ msgstr ""
+
+#~ msgid "ハンドを指定した開閉角度に動作させる．"
+#~ msgstr ""
+
+#~ msgid "6"
+#~ msgstr ""
+
+#~ msgid "CMVS"
+#~ msgstr ""
+
+#~ msgid "CMVS，X，Y，Z，Rz（単位：X，Y，Z [m]，Rz [rad]）"
+#~ msgstr ""
+
+#~ msgid "ロボット座標系の絶対値で指定された目標位置に対し，直交空間における直線補間で動作させる．"
+#~ msgstr ""
+
+#~ msgid "7"
+#~ msgstr ""
+
+#~ msgid "CMOV"
+#~ msgstr ""
+
+#~ msgid "CMOV，X，Y，Z，Rz（単位：X，Y，Z [m]，Rz [rad]）"
+#~ msgstr ""
+
+#~ msgid "ロボット座標系の絶対値で指定された目標位置に対し，関節空間における直線補間で動作させる．"
+#~ msgstr ""
+
+#~ msgid "8"
+#~ msgstr ""
+
+#~ msgid "JMOV"
+#~ msgstr ""
+
+#~ msgid "JMOV，J1，J2，J3，J4（単位：J1，J2，J4 [rad]，J3 [m]）"
+#~ msgstr ""
+
+#~ msgid "関節座標系の絶対値で指定された目標位置に対し，関節空間における直線補間で動作させる．"
+#~ msgstr ""
+
+#~ msgid "次のリンクをクリックして `./demo/RTSE.bat` を実行する．"
+#~ msgstr ""
+
+#~ msgid "RT System Editor が図2のように起動する．"
+#~ msgstr ""
+
+#~ msgid "図2　RT System Editor"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "左側のペインで 127.0.0.1 を選択し，直上の右矢印をクリックすると，起動中の RT Component が同ペイン上に表示される．ここでは "
+#~ "`ScaraRobotControlRTC` ， `VS_ASR_RTC` となるはず．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "File --> Open New System Editor を選ぶと， `System Diagram` "
+#~ "が真ん中のペインに開かれる．左側のペインから各 RTC を System Diagram にドラッグすると図3のように表示される．"
+#~ msgstr ""
+
+#~ msgid "図3　RTC を配置した RT System Editor"
+#~ msgstr ""
+
+#~ msgid "同ペイン上で各 RTC を接続する．上に挙げた2つの RTC を接続する．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "同ペイン内の`ScaraRobotControlRTC`をクリックし，直下にある“Configuration” というタブ内の "
+#~ "Configuration 値を編集する．各 Configuration 値の詳細は表2に示す通りである．"
+#~ msgstr ""
+
+#~ msgid "表2　ScaraRobotControlRTCのコンフィギュレーション"
+#~ msgstr ""
+
+#~ msgid "FilePass"
+#~ msgstr ""
+
+#~ msgid "Sample.csv"
+#~ msgstr ""
+
+#~ msgid "読み込むcsvファイルが保存されている場所までのパスを指定．"
+#~ msgstr ""
+
+#~ msgid "同ペイン上で直上左にある“ALL”というアイコンをクリック，すべての RTC を activate (参考リンク 1_)．"
+#~ msgstr ""
+
+#~ msgid "図4　RT System Editor における RTC の Activate"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "手順5～8を一括して行うスクリプト `./demo/ScaraRobotDemo/8_ConnectRTC.bat` は以下に用意してあります．"
+#~ msgstr ""
+
+#~ msgid "`ScaraRobotControlRTC` のコマンドプロンプトで `s` キーを入力すると，ロボットが動作を開始する．"
+#~ msgstr ""
+
+#~ msgid "図5 ScaraRobotControlRTC"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "`VS_ASR_RTC0` のコマンドプロンプトには，実行しているコマンドのステータスが表示されます（例：関節角リミットオーバーでエラー停止した状態）．"
+#~ msgstr ""
+
+#~ msgid "図6　関節角リミットオーバーでエラー停止した状態"
+#~ msgstr ""
+
+#~ msgid "終了するには，次の手順で \"RTC を inactivate\" --> \"RTC 間のリンクを切り離し\" --> \"各 RTC を停止\" を行う．"
+#~ msgstr ""
+
+#~ msgid "同ペイン上で直上左にある \"All Deactivate\" というアイコンをクリック"
+#~ msgstr ""
+
+#~ msgid "手順6で行ったのと逆を行う．つまり，各接続線上で右クリックし\"切断\"を選択．"
+#~ msgstr ""
+
+#~ msgid "手順1で起動したコマンドプロンプト群を手動で終了．ただし `rtm-naming.bat` のそれは停止せずとも良い．"
+#~ msgstr ""
+
+#~ msgid "※手順11を一括して行うスクリプトは以下に用意してある．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "なお，レンズキャリブレーションを実施する際の注意点を以下に挙げます． * 印刷したキャリブレーションパターンは平らな板に張り付けて使用してください． *"
+#~ " \"Image size\"は大きめの方が操作しやすいです(本チュートリアル作成時は，640x480を選択しています)．選択した\"Image "
+#~ "size\"は，\"DetectArMarkerRTC\"を実行する際に同値を用います． * "
+#~ "\"calib_dist.exe\"によるキャリブレーションにおいて，ドラッグして点を囲む際，上記リンク先の「Figure "
+#~ "2」にあるように，点のみが白，周りがすべて黒と鮮明に表示されることを確認してください．前述のようにならず，周りにも白が混ざる場合は，正しい値を取得できていません．照明条件や角度等を工夫して24点すべてで正しく取得できるようにしてください．"
+#~ " * \"calib_dist.exe\"によるキャリブレーション終了時に表示されるパラメータ（Center X，Center Y，Dist "
+#~ "Factor）は外部出力されませんので，書き留めてください．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "OSはMicrosoft Windows 7 / 8，かつInternet Explorer(IE) 8 / "
+#~ "10がインストールされたものが必要です(IEは標準でインストールされています)．"
+#~ msgstr ""
+
+#~ msgid "動作環境"
+#~ msgstr ""
+
+#~ msgid "Windows 7 / 8"
+#~ msgstr ""
+
+#~ msgid "Internet Explorer (IE) 8 / 10"
+#~ msgstr ""
+
+#~ msgid "ヴイストン株式会社製 アカデミック スカラロボット（VS-ASR） [1_]"
+#~ msgstr ""
+
+#~ msgid "実行方法"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ヴイストン株式会社より販売されている，ロボットの制御技術を学習するためのロボットプログラミング教材です．以下のリンクより，製品情報を参照することができます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "アカデミックスカラロボットに同梱されているスポンジキューブを用いて，パレタイジングキューブを作製します． 1. "
+#~ "\"palletizing_pattern.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します(Adobe "
+#~ "Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します)．"
+#~ msgstr ""
+
+#~ msgid "</br>"
+#~ msgstr ""
+
+#~ msgid "<br/>"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ヴイストン株式会社より販売されている，ロボットの制御技術を学習するためのロボットプログラミング教材です．`こちら "
+#~ "<https://www.vstone.co.jp/products/scara_robot/>`_ より，製品情報を参照することができます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "1. \"palletizing_pattern.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します(Adobe"
+#~ " Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します)．"
+#~ msgstr ""
+
+#~ msgid "2. 枠線に沿って，R，T，Mのマーカをそれぞれ1つずつはさみ等で切り離します．"
+#~ msgstr ""
+
+#~ msgid "3. 両面テープでスポンジキューブに貼り付けます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "1. "
+#~ "\"robot_calibration_grid.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（Adobe"
+#~ " Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します）．"
+#~ msgstr ""
+
+#~ msgid "2. 枠線に沿って，はさみ等で切り離します．"
+#~ msgstr ""
+
+#~ msgid "3. 下図に従って，テープ等で貼り付けます．"
+#~ msgstr ""
+
+#~ msgid "<div class=\"a-target-_blank\">"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<a target=\"_blank\" "
+#~ "href=\"https://www.vstone.co.jp/products/scara_robot/\">アカデミックスカラロボット</a>"
+#~ msgstr ""
+
+#~ msgid "</div>"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ヴイストン株式会社より販売されている，ロボットの制御技術を学習するためのロボットプログラミング教材です．`こちら "
+#~ "<https://www.vstone.co.jp/products/scara_robot/>`_より，製品情報を参照することができます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "アカデミックスカラロボットに同梱されているスポンジキューブを用いて，パレタイジングキューブを作製します． 1. "
+#~ "\"palletizing_pattern.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します(Adobe "
+#~ "Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します)． 2. "
+#~ "枠線に沿って，R，T，Mのマーカをそれぞれ1つずつはさみ等で切り離します． 3. 両面テープでスポンジキューブに貼り付けます．"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "ロボット座標系とカメラ座標系のキャリブレーションに用います． 1. "
+#~ "\"robot_calibration_grid.pdf\"をA4用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（Adobe"
+#~ " Readerの場合，\"サイズオプション\"の\"実際のサイズ\"を選択します）． 2. 枠線に沿って，はさみ等で切り離します． 3. "
+#~ "下図に従って，テープ等で貼り付けます．"
+#~ msgstr ""

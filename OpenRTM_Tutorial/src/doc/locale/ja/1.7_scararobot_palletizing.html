@@ -1,0 +1,476 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1   Introduction &mdash; openrtm_tutorial 0.4 ドキュメント</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <link rel="top" title="openrtm_tutorial 0.4 ドキュメント" href="top.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="nav-item nav-item-0"><a href="top.html">openrtm_tutorial 0.4 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a href="#id1"><span class="problematic" id="id2">**</span></a>(デモ 7) アカデミックスカラロボットによるパレタイジングデモ **</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#introduction" id="id23">1&nbsp;&nbsp;&nbsp;Introduction</a><ul class="auto-toc">
+<li><a class="reference internal" href="#id3" id="id24">1.1&nbsp;&nbsp;&nbsp;このページで体験すること</a></li>
+<li><a class="reference internal" href="#activex" id="id25">1.2&nbsp;&nbsp;&nbsp;ActiveX について（必ずお読みください）</a></li>
+<li><a class="reference internal" href="#id4" id="id26">1.3&nbsp;&nbsp;&nbsp;準備するもの</a><ul class="auto-toc">
+<li><a class="reference internal" href="#id5" id="id27">1.3.1&nbsp;&nbsp;&nbsp;ハードウエア</a><ul class="auto-toc">
+<li><a class="reference internal" href="#vs-asr" id="id28">1.3.1.1&nbsp;&nbsp;&nbsp;アカデミックスカラロボット（ VS-ASR ）</a></li>
+<li><a class="reference internal" href="#web" id="id29">1.3.1.2&nbsp;&nbsp;&nbsp;Web カメラ</a></li>
+<li><a class="reference internal" href="#pc" id="id30">1.3.1.3&nbsp;&nbsp;&nbsp;PC</a></li>
+<li><a class="reference internal" href="#id6" id="id31">1.3.1.4&nbsp;&nbsp;&nbsp;パレタイジングキューブ</a></li>
+<li><a class="reference internal" href="#id7" id="id32">1.3.1.5&nbsp;&nbsp;&nbsp;キャリブレーション用座標平面</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8" id="id33">1.3.2&nbsp;&nbsp;&nbsp;ソフトウエア</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id9" id="id34">1.4&nbsp;&nbsp;&nbsp;カメラのレンズキャリブレーション</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10" id="id35">2&nbsp;&nbsp;&nbsp;チュートリアル実施手順</a><ul class="auto-toc">
+<li><a class="reference internal" href="#nameserver" id="id36">2.1&nbsp;&nbsp;&nbsp;nameserver 起動 (全チュートリアル共通)</a></li>
+<li><a class="reference internal" href="#id11" id="id37">2.2&nbsp;&nbsp;&nbsp;チュートリアルのプログラム実行</a><ul class="auto-toc">
+<li><a class="reference internal" href="#rtcactivate" id="id38">2.2.1&nbsp;&nbsp;&nbsp;すべてのRTCをActivateするまで</a></li>
+<li><a class="reference internal" href="#id14" id="id39">2.2.2&nbsp;&nbsp;&nbsp;すべてのRTCをActivateした後</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<script src="../../batcall.js"></script><div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id23">1&nbsp;&nbsp;&nbsp;Introduction</a><a class="headerlink" href="#introduction" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id3">
+<h2><a class="toc-backref" href="#id24">1.1&nbsp;&nbsp;&nbsp;このページで体験すること</a><a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ヴイストン株式会社製アカデミックスカラロボットと Web カメラを組み合わせてパレタイジングを行います．パレタイジングの画像処理には，一例として AR マーカを用います．</p>
+</div>
+<div class="section" id="activex">
+<h2><a class="toc-backref" href="#id25">1.2&nbsp;&nbsp;&nbsp;ActiveX について（必ずお読みください）</a><a class="headerlink" href="#activex" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>本チュートリアルは ActiveX を使用しています．よって，次のような警告が出た際は「ブロックされているコンテンツを許可」もしくは「はい」を選択します．</p>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_1_2_1.png" src="_images/ScaraRobotPallet_1_2_1.png" />
+</div>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_1_2_2.png" src="_images/ScaraRobotPallet_1_2_2.png" />
+</div>
+</div>
+<div class="section" id="id4">
+<h2><a class="toc-backref" href="#id26">1.3&nbsp;&nbsp;&nbsp;準備するもの</a><a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="id5">
+<h3><a class="toc-backref" href="#id27">1.3.1&nbsp;&nbsp;&nbsp;ハードウエア</a><a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="vs-asr">
+<h4><a class="toc-backref" href="#id28">1.3.1.1&nbsp;&nbsp;&nbsp;アカデミックスカラロボット（ VS-ASR ）</a><a class="headerlink" href="#vs-asr" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>ヴイストン株式会社より販売されている，ロボットの制御技術を学習するためのロボットプログラミング教材です．以下のリンクより製品情報を参照することができます．</p>
+<div class="a-target-_blank"><a target="_blank" href="https://www.vstone.co.jp/products/scara_robot/">https://www.vstone.co.jp/products/scara_robot/</a></div><br><div class="align-center figure">
+<img alt="_images/scararobot_axis.png" src="_images/scararobot_axis.png" />
+</div>
+</div>
+<div class="section" id="web">
+<h4><a class="toc-backref" href="#id29">1.3.1.2&nbsp;&nbsp;&nbsp;Web カメラ</a><a class="headerlink" href="#web" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>USB で PC に接続できるタイプのカメラが必要です． Web カメラの販売元から明るさやホワイトバランスを調整できるソフトウエアが同梱されているものが望ましいです．ここでは例として， Logicool 社製の C600 を示します．</p>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_1_3_1_2.png" src="_images/ScaraRobotPallet_1_3_1_2.png" />
+</div>
+</div>
+<div class="section" id="pc">
+<h4><a class="toc-backref" href="#id30">1.3.1.3&nbsp;&nbsp;&nbsp;PC</a><a class="headerlink" href="#pc" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>以下に示す OS およびブラウザが必要です．</p>
+<ul class="simple">
+<li>OS: Microsoft Windows 7 / 8</li>
+<li>ブラウザ: Microsoft Internet Explorer(IE) 8 / 10 (IEは標準でインストールされています)</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h4><a class="toc-backref" href="#id31">1.3.1.4&nbsp;&nbsp;&nbsp;パレタイジングキューブ</a><a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>アカデミックスカラロボットに同梱されているスポンジキューブを用いて，パレタイジングキューブを作製します．</p>
+<ol class="arabic simple">
+<li>&#8220;armarker_for_palletizing.pdf&#8221; を A4 用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（ Adobe Reader の場合，「サイズオプション」の「実際のサイズ」を選択します）．</li>
+</ol>
+<a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_Open_ArmarkerPdf(); return false;">./misc/VstoneScaraRobotRTC/Palletizing/Tools/armarker_for_palletizing.pdf</a><ol class="arabic simple" start="2">
+<li>枠線に沿って，R，T，Mのマーカをそれぞれ1つずつはさみ等で切り離します．</li>
+<li>下図に示すように，両面テープでスポンジキューブに貼り付けます．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_Cube.png" src="_images/ScaraRobotPallet_Cube.png" />
+</div>
+</div>
+<div class="section" id="id7">
+<h4><a class="toc-backref" href="#id32">1.3.1.5&nbsp;&nbsp;&nbsp;キャリブレーション用座標平面</a><a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>ロボット座標系とカメラ座標系のキャリブレーションに用います．</p>
+<ol class="arabic simple">
+<li>&#8220;robot_calibration_grid.pdf&#8221; を A4 用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意します（ Adobe Reader の場合，「サイズオプション」の「実際のサイズ」を選択します）．</li>
+</ol>
+<a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_Open_CalibrationGridPdf(); return false;">./misc/VstoneScaraRobotRTC/Palletizing/Tools/robot_calibration_grid.pdf</a><ol class="arabic simple" start="2">
+<li>枠線に沿って，はさみ等で切り離します．</li>
+<li>下図にしたがって，テープ等でロボットの土台に貼り付けます．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_Grid.png" src="_images/ScaraRobotPallet_Grid.png" />
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h3><a class="toc-backref" href="#id33">1.3.2&nbsp;&nbsp;&nbsp;ソフトウエア</a><a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>本チュートリアルで準備されているので，基本的には必要なソフトウエアはありません．</p>
+</div>
+</div>
+<div class="section" id="id9">
+<h2><a class="toc-backref" href="#id34">1.4&nbsp;&nbsp;&nbsp;カメラのレンズキャリブレーション</a><a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>カメラのレンズキャリブレーションを行い，カメラパラメータファイルを生成します．カメラレンズ固有の歪みを矯正するために必要です．</p>
+<ol class="arabic simple">
+<li>&#8220;calib_dist.pdf&#8221; を A4 用紙に， &#8220;calib_cpara.pdf&#8221; を A3 用紙に印刷します．印刷の際にオプションで拡大・縮小されないように注意してください（ Adobe Reader の場合，「サイズオプション」の「実際のサイズ」を選択します）．次のリンクをクリックしてキャリブレーションに必要な pdf を開くことができます．</li>
+</ol>
+<a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_Open_CalibDistPdf(); return false;">./misc/VstoneScaraRobotRTC/Palletizing/Tools/calib_dist.pdf</a><br><br>
+<a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_Open_CalibCparaPdf(); return false;">./misc/VstoneScaraRobotRTC/Palletizing/Tools/calib_cpara.pdf</a><ol class="arabic simple" start="2">
+<li>レンズキャリブレーションの手順は以下のURLより参照できます． &#8220;Two Step Calibration&#8221; を選択してください．</li>
+</ol>
+<div class="a-target-_blank"><a target="_blank" href="http://www.hitl.washington.edu/artoolkit/documentation/usercalibration.htm">http://www.hitl.washington.edu/artoolkit/documentation/usercalibration.htm</a></div><p>ARToolKitのうち，レンズキャリブレーションに必要なプログラムを本チュートリアルに同梱しています．次のリンクをクリックして，該当するプログラムを開くことができます．</p>
+<a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_Start_CalibDist(); return false;">./misc/ARToolKit/calib_dist.exe</a><br><br>
+    <a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_Start_Cparam(); return false;">./misc/ARToolKit/calib_cparam.exe</a><p>レンズキャリブレーションを実施する際の注意点を以下に挙げます．</p>
+<ul class="simple">
+<li>印刷したキャリブレーションパターンは平らな板に張り付けて使用してください．</li>
+<li>「Image size」は大きめの方が操作しやすいです（本チュートリアル作成時は，640x480を選択しています）．選択した「Image size」は， &#8220;DetectArMarkerRTC&#8221; を実行する際に同値を用います．</li>
+<li>&#8220;calib_dist.exe&#8221;によるキャリブレーションにおいて，ドラッグして点を囲む際，上記リンク先の「 Figure 2 」にあるように，点のみが白，周りがすべて黒と鮮明に表示されることを確認してください．前述のようにならず，周りにも白が混ざる場合は，正しい値を取得できていません．照明条件や角度等を工夫して24点すべてで正しく取得できるようにしてください．</li>
+<li>&#8220;calib_dist.exe&#8221;によるキャリブレーション終了時に表示されるパラメータ（ Center X，Center Y，Dist Factor） は外部出力されませんので，書き留めてください．</li>
+</ul>
+<ol class="arabic" start="3">
+<li><p class="first">カメラパラメータファイルの名前を &#8220;camera_para.dat&#8221; に変更し，以下に示すディレクトリへコピーします．上書き確認されますので，&#8221;移動して置換&#8221;を選択します．:</p>
+<div class="highlight-python"><div class="highlight"><pre>..\DetectArMarkerRTC\Data
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="id10">
+<h1><a class="toc-backref" href="#id35">2&nbsp;&nbsp;&nbsp;チュートリアル実施手順</a><a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>以下，特に指定ない限り，配布 USB のホームディレクトリに居ることを前提とします．</p>
+<div class="section" id="nameserver">
+<h2><a class="toc-backref" href="#id36">2.1&nbsp;&nbsp;&nbsp;nameserver 起動 (全チュートリアル共通)</a><a class="headerlink" href="#nameserver" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>基本的に <cite>OpenRTM</cite> の <cite>nameserver</cite> は一度起動すると，起動したままでもすべてのチュートリアルは動作すると思われます．</p>
+<ol class="arabic simple">
+<li>次のリンクをクリックして <cite>nameserver</cite> を起動．</li>
+</ol>
+<ul>
+ <li><a class="reference external" href="javascript:void(0)" onclick="call_rtmnamerserver(); return false;">rtm-naming.bat</a></li>
+</ul><ol class="arabic simple" start="2">
+<li>（上記方法でうまく行かなかった場合のみ以降実施） <cite>Explorer</cite> で <cite>demo</cite> フォルダを開き，<cite>rtm-naming.bat</cite> をダブルクリックして実行．</li>
+</ol>
+<ul>
+<li><p class="first"><cite>cmd.exe</cite> (Command prompt) が開きっぱなしになり，次のような文言が表示されれば成功．:</p>
+<div class="highlight-python"><div class="highlight"><pre>Starting omniNames for the first time.
+:
+Checkpointing completed.
+</pre></div>
+</div>
+</li>
+</ul>
+<ol class="arabic simple" start="3">
+<li>上記手順で <cite>cmd.exe</cite> が消えてしまう場合は，<cite>nameserver</cite> がうまく起動していないので次の手順で原因を発見：</li>
+</ol>
+<blockquote>
+<div><p>3.1) <cite>Explorer</cite> 上で，USB のドライブ名を確認 (D/E/F etc. ここでは <cite>F</cite> と仮定)</p>
+<p>3.2) <cite>cmd.exe</cite> を手動起動 (Win 7: [<a href="#id40"><span class="problematic" id="id41">2_</span></a>], Win 8: [<a href="#id42"><span class="problematic" id="id43">3_</span></a>])</p>
+<p>3.3) 以下コマンドでフォルダ移動・コマンド実行:</p>
+<div class="highlight-python"><div class="highlight"><pre>prompt&gt; F:
+prompt&gt; cd demo
+prompt&gt; rtm-naming.bat
+</pre></div>
+</div>
+<p>エラー等発生していればここで表示されるのでその内容を診断．<cite>OpenRTM</cite> の <cite>nameserver</cite> の問題は WEB で検索して対処してみてください．</p>
+</div></blockquote>
+</div>
+<div class="section" id="id11">
+<h2><a class="toc-backref" href="#id37">2.2&nbsp;&nbsp;&nbsp;チュートリアルのプログラム実行</a><a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="rtcactivate">
+<h3><a class="toc-backref" href="#id38">2.2.1&nbsp;&nbsp;&nbsp;すべてのRTCをActivateするまで</a><a class="headerlink" href="#rtcactivate" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic simple">
+<li>次のリンクをクリックして <cite>./demo/ScaraRobotPalletizingDemo/StartRTC.bat</cite> を実行します．起動できない場合は，手動で <cite>Explorer</cite> から実行します．</li>
+</ol>
+<a class="reference external" href="javascript:void(0)" onclick="call_ScaraRobotPallet_StartRTC(); return false;">./demo/ScaraRobotPalletizingDemo/StartRTC.bat</a><ol class="arabic simple" start="2">
+<li>次のリンクをクリックして <cite>./demo/RTSE.bat</cite> を実行します．起動できない場合は，手動で <cite>Explorer</cite> から実行します．</li>
+</ol>
+<a class="reference external"  href="javascript:void(0)" onclick="call_rtseditor(); return false;">./demo/RTSE.bat</a><p>RT System Editor が下図のように起動します．</p>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_1.png" src="_images/ScaraRobotPallet_2_2_1.png" />
+</div>
+<ol class="arabic simple" start="3">
+<li>次のリンクをクリックして <cite>./demo/ScaraRobotPalletizingDemo/ConnectAndActivateRTC.bat</cite> を実行します．起動できない場合は，手動で <cite>Explorer</cite> から実行します．</li>
+</ol>
+<a class="reference external"  href="javascript:void(0)" onclick="call_ScaraRobotPallet_ConnectAndActivateRTC(); return false;">./demo/ScaraRobotPalletizingDemo/ConnectAndActivateRTC.bat</a><ol class="arabic simple" start="4">
+<li>手順5～11では，手順3でバッチファイルが自動実行する内容を手動で行う場合の手順について解説します．手順3に成功している場合は，手順12に進んでください．</li>
+<li>左側のペインで 127.0.0.1 を選択し，直上の右矢印をクリックすると，起動中の RT Component が同ペイン上に表示されます．ここでは <cite>DetectArMarkerRTC</cite> ， <cite>ScaraRobotArRTC</cite> ， <cite>VS_ASR_RTC</cite> の3つとなるはずです．</li>
+<li>同ペイン上で直上左にある &#8220;ON&#8221; というアイコンをクリックすると， <cite>System Diagram</cite> が真ん中のペインに開かれます．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_6.png" src="_images/ScaraRobotPallet_2_2_6.png" />
+</div>
+<ol class="arabic simple" start="7">
+<li>左側のペインから各 RTC を System Diagram にドラッグ＆ドロップします．</li>
+<li>コンフィギュレーションを設定します．System Diagram 上で，<a href="#id12"><span class="problematic" id="id13">`</span></a>ScaraRobotArRTC`をクリックし，選択します． System Diagram の直下にある Configuration View にある，「RobotName」の Value を「ROBOT_NAME」から「SCARA」に変更し，「適用」をクリックします．同様に「Speed」のValueを「30」から「40」に変更し，「適用」をクリックします．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_7.png" src="_images/ScaraRobotPallet_2_2_7.png" />
+</div>
+<ol class="arabic simple" start="9">
+<li>サービスポートを接続します．下図に示すように，一方の RTC の&#8221;□&#8221;上でドラッグし，もう一方の RTC の&#8221;□&#8221;上でドロップします． &#8220;Port Profile&#8221; のウィンドウが表示されますので，変更せずに &#8220;OK&#8221; を選択します．接続されたサービスポートは&#8221;水色&#8221;に変化します．なお，サービスポートの接続を間違えた場合は， &#8220;Port Profile&#8221; のウィンドウにおいて，&#8221;一致するポートインターフェースがありません。&#8221;と警告されます．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_8.png" src="_images/ScaraRobotPallet_2_2_8.png" />
+</div>
+<ol class="arabic simple" start="10">
+<li>データポートを接続します．下図に示すように，一方の RTC の&#8221;□&#8221;上でドラッグし，もう一方のRTCの&#8221;□&#8221;上でドロップします．(&#8220;□&#8221;は，一方が四角形に三角形を足した形，もう一方が四角形から三角形をくり抜いた形です)． &#8220;Connector Profile&#8221; のウィンドウが表示されますので，変更せずに &#8220;OK&#8221; を選択します．接続されたデータポートは黄緑色に変化します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_9.png" src="_images/ScaraRobotPallet_2_2_9.png" />
+</div>
+<ol class="arabic simple" start="11">
+<li>同ペイン上で直上左にある &#8220;ALL&#8221; というアイコンをクリックし，すべての RTC を Activate します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_10.png" src="_images/ScaraRobotPallet_2_2_10.png" />
+</div>
+<ol class="arabic simple" start="12">
+<li><cite>DetectArMarkerRTC</cite> が正常に起動すると，次のようなビデオプロパティを設定するウィンドウが表示されます．このうち，&#8221;出力サイズ&#8221;の設定値を1.4節のカメラのレンズキャリブレーションで用いたものを同値に設定してください．設定後は &#8220;OK&#8221; を選択します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_11.png" src="_images/ScaraRobotPallet_2_2_11.png" />
+</div>
+<ol class="arabic simple" start="13">
+<li>ビデオが正常に初期化されると，下図に示すようなキャプチャウィンドウが表示されます(ウィンドウが表示されるまで多少の時間を要する場合があります)．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_12.png" src="_images/ScaraRobotPallet_2_2_12.png" />
+</div>
+<ol class="arabic simple" start="14">
+<li><cite>ScaraRobotArRTC</cite> が正常に &#8220;Activate&#8221; されると，下図に示すような状態になります．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_13.png" src="_images/ScaraRobotPallet_2_2_13.png" />
+</div>
+<ol class="arabic simple" start="15">
+<li><cite>VS_ASR_RTC</cite> が正常に &#8220;Activate&#8221; されると，下図に示すような状態になります．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_14.png" src="_images/ScaraRobotPallet_2_2_14.png" />
+</div>
+<ol class="arabic simple" start="16">
+<li>すべてのRTCを参照しますので，下図を参考に見やすい形に並べてください．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_15.png" src="_images/ScaraRobotPallet_2_2_15.png" />
+</div>
+</div>
+<div class="section" id="id14">
+<h3><a class="toc-backref" href="#id39">2.2.2&nbsp;&nbsp;&nbsp;すべてのRTCをActivateした後</a><a class="headerlink" href="#id14" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ol class="arabic" start="17">
+<li><p class="first">ベースオフセットを設定します．<a href="#id15"><span class="problematic" id="id16">`</span></a>ScaraRobotControlRTC`のコンソールウィンドウにおいて，キーボードを「b」，「Enter」キーの順に押します．以下のように表示されたことを確認した後，ロボットのハンドを手動で座標系の原点位置に移動させます．素早く動かすとロボット故障の原因となりますので注意してください．:</p>
+<div class="highlight-python"><div class="highlight"><pre>(1st) Move the robot hand to the point of origin manually.
+(2nd) Press &#39;s&#39; and &#39;Enter&#39; key.&quot;
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_16.png" src="_images/ScaraRobotPallet_2_2_16.png" />
+</div>
+<ol class="arabic simple" start="18">
+<li>ハンドを位置決めしたら，キーボードを「s」，「Enter」キーの順に押します．</li>
+<li>キャリブレーションを行います．<a href="#id17"><span class="problematic" id="id18">`</span></a>ScaraRobotControlRTC`のコンソールウィンドウにおいて，キーボードを「c」，「Enter」キーの順に押します．</li>
+<li>下図に示すように，マーカ &#8220;R&#8221; を貼り付けたキューブを座標 (x, y) = (0, 0) に置きます．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_18.png" src="_images/ScaraRobotPallet_2_2_18.png" />
+</div>
+<ol class="arabic simple" start="21">
+<li>キャプチャウィンドウでマーカを含めたキューブが下図に示すように青線の立方体で囲まれていることを確認してください．これがARマーカを認識できていることを示します．認識されない場合は，以下に示す3つの項目で調整してください．</li>
+</ol>
+<ol class="loweralpha simple">
+<li>Webカメラの角度，照明条件を変更する．</li>
+</ol>
+<p>b. カメラキャプチャ画像の2値化の閾値を変更する．
+<a href="#id19"><span class="problematic" id="id20">`</span></a>DetectArMarkerRTC`は2値化の閾値（0～255）を変更するためのコマンドを実装しています．<a href="#id21"><span class="problematic" id="id22">`</span></a>DetectArMarkerRTC`のキャプチャウィンドウを選択し，キーボードで以下に示すキーを選択することでそれぞれ実行できます．</p>
+<ul class="simple">
+<li>p：2値化の閾値を+1</li>
+<li>m：2値化の閾値を-1</li>
+<li>n：現在の2値化の閾値を`DetectArMarkerRTC`のコンソールウィンドウに表示</li>
+</ul>
+<ol class="loweralpha simple" start="3">
+<li>Webカメラに同梱されているアプリケーションでキャプチャの明るさを変更する（明度を上げることで改善される場合が多いです）．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_22.png" src="_images/ScaraRobotPallet_22.png" />
+</div>
+<ol class="arabic simple" start="22">
+<li>同様に`DetectArMarkerRTC`のコンソールウィンドウの出力を参照し，出力値が安定していることを確認してください．安定しない場合は，手順21で述べた手段を用いて対処してください．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_23.png" src="_images/ScaraRobotPallet_23.png" />
+</div>
+<ol class="arabic simple" start="23">
+<li>キーボードの「Enter」キーを押して，マーカ座標を取得します．</li>
+<li>下図に示すように，マーカ &#8220;R&#8221; を貼り付けたキューブを座標 (x, y) = (-40, -70) に置き，手順21～23を繰り返します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_22.png" src="_images/ScaraRobotPallet_2_2_22.png" />
+</div>
+<ol class="arabic simple" start="25">
+<li>下図に示すように，マーカ &#8220;R&#8221; を貼り付けたキューブを座標 (x, y) = (40, -70) に置き，手順21～23を繰り返します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_23.png" src="_images/ScaraRobotPallet_2_2_23.png" />
+</div>
+<ol class="arabic simple" start="26">
+<li>下図に示すように，マーカ &#8220;R&#8221; を貼り付けたキューブを座標 (x, y) = (40, 70) に置き，手順21～23を繰り返します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_24.png" src="_images/ScaraRobotPallet_2_2_24.png" />
+</div>
+<ol class="arabic simple" start="27">
+<li>下図に示すように，マーカ &#8220;R&#8221; を貼り付けたキューブを座標 (x, y) = (-40, 70) に置き，手順21～23を繰り返します．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_25.png" src="_images/ScaraRobotPallet_2_2_25.png" />
+</div>
+<ol class="arabic" start="28">
+<li><p class="first">キャリブレーションによる設定値を確認します． <cite>ScaraRobotControlRTC</cite> に以下のように表示されていることを確認し，任意の位置に，マーカ &#8220;R&#8221; ， &#8220;T&#8221; ， &#8220;M&#8221; を貼り付けたキューブを配置します．:</p>
+<div class="highlight-python"><div class="highlight"><pre>(1st) Put &#39;R&#39;, &#39;T&#39; and &#39;M&#39; marker.
+(2nd) Return &#39;s&#39; and &#39;Enter&#39; key.
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_26.png" src="_images/ScaraRobotPallet_2_2_26.png" />
+</div>
+<ol class="arabic simple" start="29">
+<li>キーボードの &#8220;Enter&#8221; キーを押すと，値の取得が行われますので配置した位置と大きな相違がないことを確認します(±5mm程度目安です)．大きく異なる場合は，手順19からやり直してください．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_27.png" src="_images/ScaraRobotPallet_2_2_27.png" />
+</div>
+<ol class="arabic simple" start="30">
+<li>「ScaraRobotControlRTC」のコンソールウィンドウにおいて，キーボードを「d」，「Enter」キーの順に押すと，デモが開始されます．ARマーカを用いたパレタイジングデモの流れを下図に示します．ARマーカから位置を認識しているのは移動前のみとなります．移動後の位置はあらかじめプログラム内に格納された値です．なお，デモを終了する場合は，「ScaraRobotControlRTC」のコンソールウィンドウにおいて，キーボードの「Esc」キーを押してください．下図フローのうち，2番目もしくは4番目が終了した時点で中断されます．</li>
+</ol>
+<div class="align-center figure">
+<img alt="_images/ScaraRobotPallet_2_2_28.png" src="_images/ScaraRobotPallet_2_2_28.png" />
+</div>
+<p>Go back to <a class="reference external" href="top.html">index</a> | Go to <a class="reference external" href="2.1_samplewordlogger.html">next</a> |</p>
+<p>Choose <a class="reference external" href="index.html">Other language</a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="top.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1&nbsp;&nbsp;&nbsp;Introduction</a><ul>
+<li><a class="reference internal" href="#id3">1.1&nbsp;&nbsp;&nbsp;このページで体験すること</a></li>
+<li><a class="reference internal" href="#activex">1.2&nbsp;&nbsp;&nbsp;ActiveX について（必ずお読みください）</a></li>
+<li><a class="reference internal" href="#id4">1.3&nbsp;&nbsp;&nbsp;準備するもの</a><ul>
+<li><a class="reference internal" href="#id5">1.3.1&nbsp;&nbsp;&nbsp;ハードウエア</a><ul>
+<li><a class="reference internal" href="#vs-asr">1.3.1.1&nbsp;&nbsp;&nbsp;アカデミックスカラロボット（ VS-ASR ）</a></li>
+<li><a class="reference internal" href="#web">1.3.1.2&nbsp;&nbsp;&nbsp;Web カメラ</a></li>
+<li><a class="reference internal" href="#pc">1.3.1.3&nbsp;&nbsp;&nbsp;PC</a></li>
+<li><a class="reference internal" href="#id6">1.3.1.4&nbsp;&nbsp;&nbsp;パレタイジングキューブ</a></li>
+<li><a class="reference internal" href="#id7">1.3.1.5&nbsp;&nbsp;&nbsp;キャリブレーション用座標平面</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">1.3.2&nbsp;&nbsp;&nbsp;ソフトウエア</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id9">1.4&nbsp;&nbsp;&nbsp;カメラのレンズキャリブレーション</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">2&nbsp;&nbsp;&nbsp;チュートリアル実施手順</a><ul>
+<li><a class="reference internal" href="#nameserver">2.1&nbsp;&nbsp;&nbsp;nameserver 起動 (全チュートリアル共通)</a></li>
+<li><a class="reference internal" href="#id11">2.2&nbsp;&nbsp;&nbsp;チュートリアルのプログラム実行</a><ul>
+<li><a class="reference internal" href="#rtcactivate">2.2.1&nbsp;&nbsp;&nbsp;すべてのRTCをActivateするまで</a></li>
+<li><a class="reference internal" href="#id14">2.2.2&nbsp;&nbsp;&nbsp;すべてのRTCをActivateした後</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/1.7_scararobot_palletizing.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    モジュール、クラス、または関数名を入力してください
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="nav-item nav-item-0"><a href="top.html">openrtm_tutorial 0.4 ドキュメント</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, NEDO, TORK.
+      このドキュメントは <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1 で生成しました。
+    </div>
+  </body>
+</html>
