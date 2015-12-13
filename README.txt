@@ -51,7 +51,8 @@ ScaraRobotRTC1_0
   „   „¥iREX2015_handout.pdf
   „   „¤README.txt
   „¥Movie
-  „   „¥
+  „   „¥About_movie.html
+  „   „¥About_movie.md
   „   „¤README.txt
   „¥OpenRTM_Tutorial
   „   „¥src
